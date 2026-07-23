@@ -1,0 +1,38 @@
+# Secrets and credentials
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.csr
+secrets/
+credentials/
+
+# Configuration exports and backups
+*.xml
+*.backup
+*.bak
+*.tar
+*.tar.gz
+*.zip
+backups/
+private/
+
+# Logs and databases
+*.log
+*.db
+*.sqlite
+data/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Obsidian workspace metadata
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.trash/
