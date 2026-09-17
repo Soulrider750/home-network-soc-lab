@@ -1,73 +1,129 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1060" viewBox="0 0 1600 1060">
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1410" viewBox="0 0 1800 1410">
 <defs>
-  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/></marker>
-  <marker id="blueArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/></marker>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/></marker>
 </defs>
-<style>
-  text { font-family: Arial, sans-serif; fill: #172033; }
-  .title { font-size: 38px; font-weight: 700; fill: white; }
-  .subtitle { font-size: 19px; fill: #dbeafe; }
-  .section { font-size: 24px; font-weight: 700; }
-  .heading { font-size: 21px; font-weight: 700; }
-  .body { font-size: 17px; }
-  .small { font-size: 15px; fill: #475569; }
-  .line { stroke: #475569; stroke-width: 3; fill: none; marker-end: url(#arrow); }
-  .tunnel { stroke: #2563eb; stroke-width: 4; stroke-dasharray: 10 8; fill: none; marker-end: url(#blueArrow); }
-</style>
-<rect x="0" y="0" width="1600" height="1060" fill="#f8fafc"/>
-<rect x="0" y="0" width="1600" height="110" fill="#102d5a"/>
-<text x="55" y="55" class="title">Planned NucBox four-VM architecture</text>
-<text x="55" y="88" class="subtitle">OPNsense routing • Omada VLAN trunk • separate public, private, and SOC environments</text>
-
-<rect x="55" y="155" width="430" height="145" rx="18" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
-<text x="77" y="194" class="heading">Internet and Cloudflare</text>
-<text x="77" y="228" class="body">HTTPS visitors reach public sites</text>
-<text x="77" y="253" class="body">Cloudflare Tunnel returns to VLAN 81</text>
-<rect x="610" y="155" width="370" height="145" rx="18" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
-<text x="632" y="194" class="heading">OPNsense firewall</text>
-<text x="632" y="228" class="body">WAN, VLAN gateways, VPN</text>
-<text x="632" y="253" class="body">Default-deny inter-VLAN policy</text>
-<rect x="1105" y="155" width="440" height="145" rx="18" fill="#ecfdf5" stroke="#86efac" stroke-width="2"/>
-<text x="1127" y="194" class="heading">Omada managed switch</text>
-<text x="1127" y="228" class="body">Tagged trunk to one-NIC NucBox</text>
-<text x="1127" y="253" class="body">Access ports and VLAN-mapped AP</text>
-<path d="M 485 225 L 610 225" stroke="#475569" stroke-width="3" fill="none"/>
-<path d="M 980 225 L 1105 225" class="line"/>
-<path d="M 1325 300 L 1325 360" class="line"/>
-<rect x="55" y="360" width="1490" height="500" rx="22" fill="#ffffff" stroke="#94a3b8" stroke-width="3"/>
-<text x="88" y="402" class="section">NucBox hypervisor: VLAN-aware bridge, four persistent VMs</text>
-<text x="88" y="431" class="small">Management interface only on VLAN 10; OPNsense remains the router between VM zones</text>
-<rect x="88" y="468" width="335" height="250" rx="18" fill="#eff6ff" stroke="#60a5fa" stroke-width="2"/>
-<text x="110" y="507" class="heading">Public-projects VM • VLAN 81</text>
-<text x="110" y="541" class="body">KEV dashboard and portfolio</text>
-<text x="110" y="566" class="body">NGINX and cloudflared</text>
-<text x="110" y="591" class="body">Public tunnel; no WAN forward</text>
-<text x="110" y="616" class="body">No personal-data access</text>
-<rect x="450" y="468" width="335" height="250" rx="18" fill="#fdf2f8" stroke="#f9a8d4" stroke-width="2"/>
-<text x="472" y="507" class="heading">Nextcloud VM • VLAN 80</text>
-<text x="472" y="541" class="body">Nextcloud app, database, cache</text>
-<text x="472" y="566" class="body">Private local/VPN access</text>
-<text x="472" y="591" class="body">Separate data and backup</text>
-<text x="472" y="616" class="body">No public tunnel route</text>
-<rect x="812" y="468" width="335" height="250" rx="18" fill="#fefce8" stroke="#fde047" stroke-width="2"/>
-<text x="834" y="507" class="heading">Media/internal VM • VLAN 30</text>
-<text x="834" y="541" class="body">Jellyfin and reviewed services</text>
-<text x="834" y="566" class="body">Trusted/Media/VPN clients</text>
-<text x="834" y="591" class="body">No public video tunnel</text>
-<text x="834" y="616" class="body">Private media storage</text>
-<rect x="1174" y="468" width="335" height="250" rx="18" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
-<text x="1196" y="507" class="heading">SOC VM • VLAN 70</text>
-<text x="1196" y="541" class="body">Wazuh and supporting stack</text>
-<text x="1196" y="566" class="body">Restricted dashboard access</text>
-<text x="1196" y="591" class="body">Specific log-ingestion paths</text>
-<text x="1196" y="616" class="body">Shared host failure risk</text>
-<path d="M 140 300 L 140 340 L 72 340 L 72 450 L 250 450 L 250 468" class="tunnel"/>
-<text x="160" y="334" class="small">tunnel established outbound</text>
-<rect x="88" y="755" width="1420" height="74" rx="12" fill="#f1f5f9" stroke="#cbd5e1"/>
-<text x="108" y="784" class="body">Approved Trusted/VPN access → Nextcloud and Jellyfin   •   Approved admin/VPN access → Management and SOC</text>
-<text x="108" y="811" class="small">Log sources → Wazuh ingestion only. No public-project route into Nextcloud, internal services, or management.</text>
-<text x="55" y="915" class="section">Other network zones</text>
-<text x="55" y="952" class="body">VLAN 20 Trusted   •   VLAN 40 Media clients   •   VLAN 50 IoT   •   VLAN 60 Guest</text>
-<text x="55" y="984" class="body">VLAN 90 temporary Attack Lab   •   VLAN 99 unused-port parking   •   Optional Omada Controller: placement TBD in Management</text>
-<text x="55" y="1025" class="small">Planning diagram only. NucBox capacity, VM deployment, firewall behavior, and recovery remain to be validated.</text>
+<rect x="0" y="0" width="1800" height="1410" rx="0" fill="#f8fafc"/>
+<rect x="0" y="0" width="1800" height="112" rx="0" fill="#102c50"/>
+<text x="55" y="56" font-family="Arial, sans-serif" font-size="39" font-weight="700" fill="#ffffff" text-anchor="start">Home network and NucBox: planned logical topology</text>
+<text x="56" y="89" font-family="Arial, sans-serif" font-size="20" font-weight="400" fill="#dbeafe" text-anchor="start">Zones above  •  permitted routes below  •  OPNsense enforces inter-VLAN policy</text>
+<rect x="50" y="145" width="365" height="550" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="76" y="188" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172033" text-anchor="start">Network edge and routing</text>
+<text x="76" y="215" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#475569" text-anchor="start">The path every VLAN uses to reach WAN</text>
+<rect x="76" y="244" width="313" height="109" rx="16" fill="#eff6ff" stroke="#60a5fa" stroke-width="2"/>
+<text x="99" y="281" font-family="Arial, sans-serif" font-size="23" font-weight="700" fill="#172033" text-anchor="start">Internet + Cloudflare</text>
+<text x="99" y="310" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Public visitors: HTTPS</text>
+<text x="99" y="335" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#475569" text-anchor="start">Tunnel transport over WAN</text>
+<path d="M 232 353 L 232 386" stroke="#64748b" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<text x="252" y="378" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#475569" text-anchor="start">WAN</text>
+<rect x="76" y="395" width="313" height="124" rx="16" fill="#fff7ed" stroke="#fb923c" stroke-width="2"/>
+<text x="99" y="432" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#172033" text-anchor="start">OPNsense on Protectli</text>
+<text x="99" y="462" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">VLAN gateways + firewall</text>
+<text x="99" y="489" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#475569" text-anchor="start">VPN; default deny between zones</text>
+<path d="M 232 519 L 232 553" stroke="#64748b" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<text x="252" y="545" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#475569" text-anchor="start">LAN trunk</text>
+<rect x="76" y="562" width="313" height="105" rx="16" fill="#ecfdf5" stroke="#34d399" stroke-width="2"/>
+<text x="99" y="599" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#172033" text-anchor="start">Omada managed switch</text>
+<text x="99" y="628" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">802.1Q trunk to NucBox</text>
+<text x="99" y="652" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#475569" text-anchor="start">AP + client access ports</text>
+<rect x="450" y="145" width="1300" height="550" rx="22" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+<text x="480" y="190" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#172033" text-anchor="start">NucBox hypervisor</text>
+<text x="480" y="219" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#475569" text-anchor="start">Intel Core i9-13900HK  •  32 GB DDR5  •  1 TB SSD  •  four application VMs + management container</text>
+<rect x="480" y="245" width="1240" height="91" rx="14" fill="#edf2f7" stroke="#64748b" stroke-width="2"/>
+<text x="505" y="280" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#172033" text-anchor="start">Management zone  •  VLAN 10  •  10.10.10.0/24</text>
+<text x="505" y="311" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">NucBox hypervisor + separate Omada Controller container; approved admin/VPN access only</text>
+<rect x="1650" y="265" width="48" height="42" rx="21" fill="#475569"/>
+<text x="1674" y="294" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">R4</text>
+<rect x="480" y="368" width="300" height="274" rx="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+<rect x="480" y="368" width="8" height="274" rx="4" fill="#2563eb"/>
+<text x="503" y="408" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172033" text-anchor="start">Public projects</text>
+<rect x="502" y="423" width="256" height="42" rx="10" fill="#ffffff" stroke="#2563eb" stroke-width="1"/>
+<text x="515" y="450" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#2563eb" text-anchor="start">VLAN 81  •  10.10.81.0/24</text>
+<text x="503" y="496" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">KEV dashboard + portfolio</text>
+<text x="503" y="524" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">NGINX + cloudflared</text>
+<text x="503" y="552" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Public sites only</text>
+<text x="503" y="580" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">No personal-data mounts</text>
+<rect x="715" y="383" width="44" height="36" rx="18" fill="#2563eb"/>
+<text x="737" y="408" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">R1</text>
+<rect x="794" y="368" width="300" height="274" rx="18" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+<rect x="794" y="368" width="8" height="274" rx="4" fill="#7c3aed"/>
+<text x="817" y="408" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172033" text-anchor="start">Nextcloud</text>
+<rect x="816" y="423" width="256" height="42" rx="10" fill="#ffffff" stroke="#7c3aed" stroke-width="1"/>
+<text x="829" y="450" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#7c3aed" text-anchor="start">VLAN 80  •  10.10.80.0/24</text>
+<text x="817" y="496" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Nextcloud + database/cache</text>
+<text x="817" y="524" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Private file access</text>
+<text x="817" y="552" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Trusted or VPN clients</text>
+<text x="817" y="580" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">No public hostname</text>
+<rect x="1029" y="383" width="44" height="36" rx="18" fill="#7c3aed"/>
+<text x="1051" y="408" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">R2</text>
+<rect x="1108" y="368" width="300" height="274" rx="18" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+<rect x="1108" y="368" width="8" height="274" rx="4" fill="#ea580c"/>
+<text x="1131" y="408" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172033" text-anchor="start">Media / internal</text>
+<rect x="1130" y="423" width="256" height="42" rx="10" fill="#ffffff" stroke="#ea580c" stroke-width="1"/>
+<text x="1143" y="450" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ea580c" text-anchor="start">VLAN 30  •  10.10.30.0/24</text>
+<text x="1131" y="496" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Jellyfin + reviewed services</text>
+<text x="1131" y="524" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Local or VPN playback</text>
+<text x="1131" y="552" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Private media storage</text>
+<text x="1131" y="580" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">No public video tunnel</text>
+<rect x="1343" y="383" width="44" height="36" rx="18" fill="#ea580c"/>
+<text x="1365" y="408" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">R3</text>
+<rect x="1422" y="368" width="300" height="274" rx="18" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+<rect x="1422" y="368" width="8" height="274" rx="4" fill="#059669"/>
+<text x="1445" y="408" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172033" text-anchor="start">SOC / monitoring</text>
+<rect x="1444" y="423" width="256" height="42" rx="10" fill="#ffffff" stroke="#059669" stroke-width="1"/>
+<text x="1457" y="450" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#059669" text-anchor="start">VLAN 70  •  10.10.70.0/24</text>
+<text x="1445" y="496" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Wazuh supporting stack</text>
+<text x="1445" y="524" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Restricted dashboard</text>
+<text x="1445" y="552" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">Specific log-ingest rules</text>
+<text x="1445" y="580" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#172033" text-anchor="start">No public hostname</text>
+<rect x="1657" y="383" width="44" height="36" rx="18" fill="#059669"/>
+<text x="1679" y="408" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">R5</text>
+<path d="M 389 615 L 450 615" stroke="#64748b" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="397" y="592" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#475569" text-anchor="start">Trunk</text>
+<text x="480" y="674" font-family="Arial, sans-serif" font-size="17" font-weight="600" fill="#334155" text-anchor="start">Bridge assigns one VM VLAN per workload; OPNsense alone routes between zones.</text>
+<text x="54" y="749" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#172033" text-anchor="start">Routes and policy</text>
+<text x="370" y="749" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#475569" text-anchor="start">Numbered paths identify the traffic permitted through the network boundary.</text>
+<rect x="54" y="775" width="1692" height="78" rx="12" fill="#eff6ff" stroke="#d5dce6" stroke-width="1"/>
+<rect x="54" y="775" width="9" height="78" rx="4" fill="#2563eb"/>
+<rect x="76" y="794" width="50" height="39" rx="19" fill="#2563eb"/>
+<text x="101" y="821" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">R1</text>
+<text x="148" y="806" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#2563eb" text-anchor="start">PUBLIC WEB</text>
+<text x="148" y="832" font-family="Arial, sans-serif" font-size="20" font-weight="600" fill="#172033" text-anchor="start">Visitor → Cloudflare HTTPS → established tunnel → VLAN 81 NGINX → KEV / portfolio</text>
+<text x="1630" y="832" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#475569" text-anchor="end">Tunnel starts outbound</text>
+<rect x="54" y="865" width="1692" height="78" rx="12" fill="#f5f3ff" stroke="#d5dce6" stroke-width="1"/>
+<rect x="54" y="865" width="9" height="78" rx="4" fill="#7c3aed"/>
+<rect x="76" y="884" width="50" height="39" rx="19" fill="#7c3aed"/>
+<text x="101" y="911" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">R2</text>
+<text x="148" y="896" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#7c3aed" text-anchor="start">PRIVATE FILES</text>
+<text x="148" y="922" font-family="Arial, sans-serif" font-size="20" font-weight="600" fill="#172033" text-anchor="start">Trusted or VPN client → OPNsense → VLAN 80 Nextcloud</text>
+<text x="1630" y="922" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#475569" text-anchor="end">Application port only</text>
+<rect x="54" y="955" width="1692" height="78" rx="12" fill="#fff7ed" stroke="#d5dce6" stroke-width="1"/>
+<rect x="54" y="955" width="9" height="78" rx="4" fill="#ea580c"/>
+<rect x="76" y="974" width="50" height="39" rx="19" fill="#ea580c"/>
+<text x="101" y="1001" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">R3</text>
+<text x="148" y="986" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#ea580c" text-anchor="start">PRIVATE MEDIA</text>
+<text x="148" y="1012" font-family="Arial, sans-serif" font-size="20" font-weight="600" fill="#172033" text-anchor="start">Trusted, Media or VPN client → OPNsense → VLAN 30 Jellyfin</text>
+<text x="1630" y="1012" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#475569" text-anchor="end">Application port only</text>
+<rect x="54" y="1045" width="1692" height="78" rx="12" fill="#f1f5f9" stroke="#d5dce6" stroke-width="1"/>
+<rect x="54" y="1045" width="9" height="78" rx="4" fill="#475569"/>
+<rect x="76" y="1064" width="50" height="39" rx="19" fill="#475569"/>
+<text x="101" y="1091" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">R4</text>
+<text x="148" y="1076" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#475569" text-anchor="start">ADMINISTRATION</text>
+<text x="148" y="1102" font-family="Arial, sans-serif" font-size="20" font-weight="600" fill="#172033" text-anchor="start">Admin/VPN → VLAN 10 host + Omada container + network gear; restricted VLAN 70 dashboard</text>
+<text x="1630" y="1102" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#475569" text-anchor="end">Selected admin ports</text>
+<rect x="54" y="1135" width="1692" height="78" rx="12" fill="#ecfdf5" stroke="#d5dce6" stroke-width="1"/>
+<rect x="54" y="1135" width="9" height="78" rx="4" fill="#059669"/>
+<rect x="76" y="1154" width="50" height="39" rx="19" fill="#059669"/>
+<text x="101" y="1181" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">R5</text>
+<text x="148" y="1166" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#059669" text-anchor="start">TELEMETRY</text>
+<text x="148" y="1192" font-family="Arial, sans-serif" font-size="20" font-weight="600" fill="#172033" text-anchor="start">OPNsense + monitored VMs → VLAN 70 Wazuh ingestion</text>
+<text x="1630" y="1192" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#475569" text-anchor="end">Specific ingest ports</text>
+<rect x="54" y="1225" width="1692" height="78" rx="12" fill="#fef2f2" stroke="#d5dce6" stroke-width="1"/>
+<rect x="54" y="1225" width="9" height="78" rx="4" fill="#dc2626"/>
+<rect x="76" y="1244" width="50" height="39" rx="19" fill="#dc2626"/>
+<text x="101" y="1271" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">X</text>
+<text x="148" y="1256" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#dc2626" text-anchor="start">BLOCKED BY DEFAULT</text>
+<text x="148" y="1282" font-family="Arial, sans-serif" font-size="20" font-weight="600" fill="#172033" text-anchor="start">Direct WAN → apps; VLAN 81 → personal/management; Guest, IoT or Lab → internal</text>
+<text x="1630" y="1282" font-family="Arial, sans-serif" font-size="16" font-weight="400" fill="#475569" text-anchor="end">Exceptions require review</text>
+<text x="55" y="1368" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#475569" text-anchor="start">Other zones:  VLAN 20 Trusted   •   VLAN 40 Media clients   •   VLAN 50 IoT   •   VLAN 60 Guest   •   VLAN 90 Attack Lab   •   VLAN 99 Parking</text>
+<text x="1745" y="1397" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#64748b" text-anchor="end">Planning diagram; deployment and rules require validation.</text>
 </svg>

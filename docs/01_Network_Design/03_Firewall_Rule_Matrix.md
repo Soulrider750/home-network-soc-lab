@@ -20,7 +20,7 @@ Cloudflare's required tunnel destinations can change; verify its current firewal
 
 | Source | Destination | Planned action | Purpose |
 |---|---|---|---|
-| Approved admin or VPN client | Management VLAN 10 | Allow selected admin ports | OPNsense, switch, AP, hypervisor, optional controller |
+| Approved admin or VPN client | Management VLAN 10 | Allow selected admin ports | OPNsense, switch, AP, hypervisor, separate Omada Controller container |
 | Approved admin or VPN client | SOC VM, VLAN 70 | Allow dashboard/admin ports | Review alerts |
 | Approved Trusted or VPN client | Nextcloud VM, VLAN 80 | Allow application port only | Private file access |
 | Approved Trusted, Media, or VPN client | Jellyfin VM, VLAN 30 | Allow application port only | Private playback |
@@ -29,6 +29,8 @@ Cloudflare's required tunnel destinations can change; verify its current firewal
 | Public-projects VM, VLAN 81 | Nextcloud, Server, Trusted, Management, SOC dashboard | Block | Preserve public/personal boundary |
 | Nextcloud VM, VLAN 80 | Public projects, Trusted, Management | Block by default | Prevent lateral access |
 | Monitored hosts/services | Wazuh ingestion endpoint, VLAN 70 | Allow specific agent/syslog ports | Centralized monitoring |
+| Omada Controller container, VLAN 10 | Omada switch/AP management addresses, VLAN 10 | Allow documented management/adoption traffic | Device control within the Management VLAN; no inter-VLAN rule when local |
+| Omada Controller container, VLAN 10 | Wazuh ingestion endpoint, VLAN 70 | Optional narrow allow | Controller event forwarding if supported and enabled |
 | Attack Lab VLAN 90 | Internal zones | Block by default | Prevent accidental exposure |
 | Attack Lab VLAN 90 | Approved test target | Temporary allow | Controlled exercise |
 | Any | VLAN 99 | Block | Parking network |
@@ -40,6 +42,7 @@ Allow response traffic through stateful rules. A required cross-zone dependency 
 | Alias | Members |
 |---|---|
 | ADMIN_DEVICES | Approved administrator device/VPN addresses |
+| OMADA_CONTROLLER | Controller address on Management VLAN 10 |
 | PUBLIC_PROJECTS_VM | Public VM address on VLAN 81 |
 | NEXTCLOUD_VM | Nextcloud VM address on VLAN 80 |
 | MEDIA_SERVICES_VM | Media/internal-services VM address on VLAN 30 |

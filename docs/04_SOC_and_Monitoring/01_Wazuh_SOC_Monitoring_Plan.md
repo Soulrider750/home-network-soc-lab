@@ -11,6 +11,7 @@ Wazuh shares physical hardware with the services it monitors, so a NucBox outage
 | Source | Planned evidence |
 |---|---|
 | OPNsense | Inter-VLAN blocks, VPN connections, and firewall policy changes |
+| Omada Controller, if log export is supported | Device adoption, administrator actions, and controller health |
 | NucBox hypervisor | Host authentication, updates, VM lifecycle, and configuration changes |
 | Public-projects VM | NGINX requests/errors, KEV refresh status, portfolio origin, tunnel health, Linux auth, Docker events |
 | Nextcloud VM | Authentication, app errors, database/backup status, Linux auth, Docker events |

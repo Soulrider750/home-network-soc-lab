@@ -32,6 +32,8 @@ Port 3 carries tagged VM VLANs and the Management VLAN; the hypervisor managemen
 
 Keep AP management on VLAN 10 and block wireless clients from that interface. Enable mDNS reflection only where a tested casting use case needs it.
 
-## Optional Omada Controller
+## Omada Controller integration
 
-The Controller remains optional. Its placement is undecided; if it runs on the NucBox, it needs a separate, restricted Management-zone design and capacity review. Do not place it in the Public-projects, Nextcloud, Media/internal-services, or SOC VM merely to keep it on the same host.
+The Omada Controller is planned in a dedicated NucBox management container on VLAN 10 for central switch/AP management. Reserve a controller address (proposed `10.10.10.10`) and restrict its UI to approved admin/VPN clients. Keep switch and AP management addresses on VLAN 10, and verify that the controller can reach their documented adoption and management services without a broad application-VLAN rule.
+
+Back up standalone switch/AP settings before adoption. Adopt one device at a time, then verify Port 1 and Port 3 trunks, AP SSID mappings, client DHCP, and management reachability. Export a controller backup off its host and test restoration and device reconnection. Container compatibility and resource allocation still need validation; see the [Omada Controller plan](03_Omada_Controller_Plan.md).

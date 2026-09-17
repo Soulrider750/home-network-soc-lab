@@ -15,7 +15,7 @@ The planned firewall is a Protectli Vault V1410 running OPNsense. It supplies WA
 
 | Interface | VLAN | Purpose |
 |---|---:|---|
-| MGMT | 10 | Infrastructure and hypervisor administration |
+| MGMT | 10 | Infrastructure, hypervisor, and Omada Controller administration |
 | TRUSTED | 20 | Personal and approved admin devices |
 | SERVERS | 30 | Jellyfin and private services |
 | MEDIA | 40 | Media clients |
@@ -36,6 +36,6 @@ Plan WireGuard or another approved VPN on OPNsense for private remote access. Sc
 
 ## DNS and logging
 
-Use public DNS only for the two approved public-site hostnames mapped to the public-project tunnel. Resolve private Nextcloud and Jellyfin names through internal DNS or VPN DNS; do not assume a public hostname grants access control. Forward OPNsense firewall and VPN events to the Wazuh ingestion endpoint through a specific rule.
+Use public DNS only for the two approved public-site hostnames mapped to the public-project tunnel. Resolve private Nextcloud and Jellyfin names through internal DNS or VPN DNS; do not assume a public hostname grants access control. Forward OPNsense firewall and VPN events to the Wazuh ingestion endpoint through a specific rule. Controller, switch, and AP management traffic should stay within VLAN 10 where possible; any cross-VLAN adoption exception must be limited to documented endpoints and ports.
 
 Export the OPNsense configuration after baseline setup and major policy changes, then test recovery.

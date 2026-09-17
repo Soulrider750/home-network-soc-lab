@@ -6,6 +6,7 @@
 |---|---|
 | OPNsense | Restrict GUI to approved Management/VPN clients; default-deny inter-VLAN rules; export configuration |
 | Omada switch/AP | Management VLAN 10; controlled trunks; disabled/parked unused ports; firmware updates |
+| Omada Controller container | Separate NucBox management container on VLAN 10 only; restricted admin/VPN UI; versioned configuration exports; no public hostname |
 | NucBox hypervisor | Management VLAN 10 only; restricted admin access; updates; VLAN-aware bridge; no inter-VLAN routing |
 | Four guest VMs | Minimal guest OS; distinct credentials, disks, Compose projects, patching, and guest firewalls |
 | Public-projects VM | No personal-data mounts; protected tunnel credential; NGINX/app logs; no inbound WAN forward |
@@ -13,13 +14,14 @@
 | Media/internal-services VM | Private Jellyfin access; approved media mounts; restricted admin interface |
 | SOC VM | Private Wazuh dashboard; bounded log/index storage; monitored ingestion rules |
 
-The optional Omada Controller needs a separate Management-zone placement decision. Keep VPN, hypervisor, Docker, OPNsense, and Wazuh administration off public hostnames.
+The Omada Controller container's resource allocation and compatibility remain to be validated. Keep VPN, hypervisor, Docker, OPNsense, and Wazuh administration off public hostnames.
 
 ## Backup plan
 
 | Asset | Planned recovery copy |
 |---|---|
-| OPNsense and Omada configuration | Export after changes and verify import/recovery path |
+| OPNsense configuration | Export after changes and verify import/recovery path |
+| Omada Controller and device configuration | Export controller settings and relevant data off-host after adoption/changes; verify restore and device reconnection |
 | Hypervisor configuration and VM definitions | Off-host copy sufficient to rebuild VLAN-aware bridge and guests |
 | Public-projects VM | Versioned deployment config, KEV data, portfolio files, tunnel configuration/credential held separately, and tested restore |
 | Nextcloud VM | Coordinated app files, user data, configuration, database, and cache rebuild procedure |
@@ -32,6 +34,7 @@ Use a separate encrypted USB drive or NAS for off-host copies; confirm capacity 
 ## Restore and acceptance tests
 
 - Restore one guest from off-host backup onto isolated storage and verify its assigned VLAN.
+- Restore the Omada Controller configuration and verify switch/AP adoption and management access without changing client VLAN policy.
 - Restore Nextcloud database and data as a matched set.
 - Restore Jellyfin configuration and selected media.
 - Restore KEV data and private serving, then test its public hostname and refresh schedule before retiring the old deployment.

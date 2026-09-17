@@ -1,37 +1,35 @@
 # Planned Logical Topology
 
-The four-VM arrangement below supersedes the original single-Docker-host design. It is a proposed architecture pending installation and validation.
+This diagram separates **where systems live** from **which routes are allowed**. It describes the proposed design; VLANs, VMs, the Omada Controller, and firewall rules still require implementation and testing.
 
-![Planned four-VM NucBox topology](../../assets/diagrams/logical_topology_final.png)
+![Planned home network zones and numbered routes](../../assets/diagrams/logical_topology_final.png)
 
-```mermaid
-flowchart TB
-  Internet --> Cloudflare
-  Cloudflare -- outbound tunnel --> Public["Public-projects VM<br/>VLAN 81: KEV + portfolio + NGINX + cloudflared"]
-  Internet --> OPNsense["OPNsense on Protectli<br/>VLAN gateways + firewall + VPN"]
-  OPNsense --> Switch["Omada managed switch"]
-  Switch --> AP["Omada AP<br/>client VLANs"]
-  Switch -- "802.1Q trunk: 10, 30, 70, 80, 81" --> NucBox["NucBox hypervisor<br/>management VLAN 10"]
-  NucBox --> Public
-  NucBox --> Nextcloud["Nextcloud VM<br/>VLAN 80: app + database + cache"]
-  NucBox --> Media["Media/internal-services VM<br/>VLAN 30: Jellyfin + private services"]
-  NucBox --> SOC["SOC VM<br/>VLAN 70: Wazuh"]
-  OPNsense -- "approved VPN and local routes" --> Nextcloud
-  OPNsense -- "approved VPN, Trusted, Media routes" --> Media
-  Public -. "logs only" .-> SOC
-  Nextcloud -. "logs only" .-> SOC
-  Media -. "logs only" .-> SOC
-```
+## Zones and physical path
 
-OPNsense routes between VLANs and enforces default-deny policy. The NucBox bridge assigns VLAN tags to VMs but must not act as an inter-VLAN router. Two devices inside one VLAN, or two containers inside one VM, can exchange traffic without crossing OPNsense; the public VM and Nextcloud therefore use different VLANs.
+OPNsense on the Protectli is the gateway and default-deny firewall for routed VLANs. Its LAN trunk reaches the Omada switch. The switch connects the AP and carries VLANs 10, 30, 70, 80, and 81 to the NucBox's single Ethernet port. A VLAN-aware bridge tags each NucBox workload with its assigned VLAN; it must not route between them.
 
-| Flow | Planned path |
+| Zone | Planned systems | Access boundary |
+|---|---|---|
+| VLAN 10 Management | OPNsense, Omada switch/AP, NucBox hypervisor, separate Omada Controller container | Approved administrator or VPN clients only |
+| VLAN 81 Public-project DMZ | KEV dashboard, portfolio, NGINX, public-project `cloudflared` in one VM | Public sites through outbound tunnel |
+| VLAN 80 Nextcloud app | Nextcloud app, database, cache in one VM | Approved Trusted/VPN clients only |
+| VLAN 30 Servers | Jellyfin and reviewed private services in one VM | Approved Trusted/Media/VPN clients only |
+| VLAN 70 SOC | Wazuh manager, indexer, dashboard in one VM | Specific log ingestion and restricted dashboard access |
+| VLANs 20/40/50/60/90/99 | Trusted/Media clients, IoT, Guest, temporary Attack Lab, unused-port parking | Each has its own documented policy |
+
+The Omada Controller belongs in a separate NucBox management container on VLAN 10. Its resource allocation still needs validation in the [controller plan](../02_OPNsense_and_Omada_Config/03_Omada_Controller_Plan.md); the container does not count as one of the four application VMs.
+
+## Numbered routes
+
+| Label | Planned path |
 |---|---|
-| Public KEV/portfolio | Visitor → Cloudflare HTTPS → public-project tunnel → NGINX/origin in VLAN 81 |
-| Private Nextcloud | Approved Trusted/VPN client → OPNsense → VLAN 80 |
-| Private Jellyfin | Approved Trusted/Media/VPN client → OPNsense → VLAN 30 |
-| Administration | Approved admin/VPN source → Management VLAN 10 or restricted SOC/application admin endpoint |
-| Monitoring | Approved source → Wazuh ingestion on VLAN 70 |
-| Attack testing | Isolated VLAN 90 → explicitly approved lab target only |
+| R1 Public web | Visitor → Cloudflare HTTPS → established outbound tunnel → VLAN 81 NGINX → KEV or portfolio |
+| R2 Private files | Approved Trusted/VPN client → OPNsense → VLAN 80 Nextcloud application port |
+| R3 Private media | Approved Trusted/Media/VPN client → OPNsense → VLAN 30 Jellyfin application port |
+| R4 Administration | Approved admin/VPN client → VLAN 10 infrastructure and separate Omada Controller container, or restricted VLAN 70 Wazuh dashboard |
+| R5 Telemetry | OPNsense and monitored VMs → specific Wazuh ingestion endpoints on VLAN 70 |
+| X Blocked | Direct WAN access to application/management ports; Public-project VM → personal or management zones; Guest/IoT/Attack Lab → internal zones by default |
 
-No direct WAN forwarding is planned for KEV, portfolio, Nextcloud, Jellyfin, Wazuh, or infrastructure administration. A VPN endpoint on OPNsense may require its own tightly scoped access configuration. The NucBox is still one physical failure domain; off-host backups and restore tests are part of the design.
+The public VM initiates its Cloudflare Tunnel **outbound** across OPNsense and the Omada trunk; the public request returns through that established tunnel. No inbound WAN website port forward is planned. A VPN endpoint on OPNsense may need a separate narrowly scoped WAN rule.
+
+Traffic between devices in the same VLAN or containers inside one VM can bypass OPNsense's inter-VLAN policy. Guest firewalls, container boundaries, and application authentication remain necessary. All four VMs and any NucBox-hosted controller still share one physical failure domain, so off-host backups and restore tests are part of the plan.

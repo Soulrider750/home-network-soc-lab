@@ -4,7 +4,7 @@ The plan uses `10.10.x.0/24` addressing. OPNsense supplies each routed VLAN's ga
 
 | VLAN | Name | Subnet | Gateway | DHCP | Purpose |
 |---|---|---|---|---|---|
-| 10 | Management | 10.10.10.0/24 | 10.10.10.1 | Limited/reserved | OPNsense, switch, AP, hypervisor, optional Omada Controller |
+| 10 | Management | 10.10.10.0/24 | 10.10.10.1 | Limited/reserved | OPNsense, switch, AP, hypervisor, Omada Controller |
 | 20 | Trusted | 10.10.20.0/24 | 10.10.20.1 | Yes | Personal and approved admin devices |
 | 30 | Servers | 10.10.30.0/24 | 10.10.30.1 | Reserved/static | Media/internal-services VM, Jellyfin, private services |
 | 40 | Media | 10.10.40.0/24 | 10.10.40.1 | Yes | TVs, streaming devices, consoles, media clients |
@@ -24,7 +24,7 @@ The plan uses `10.10.x.0/24` addressing. OPNsense supplies each routed VLAN's ga
 | Omada switch management | 10.10.10.2 |
 | Omada AP management | 10.10.10.3 |
 | NucBox hypervisor management | 10.10.10.20 |
-| Optional Omada Controller | To be chosen in VLAN 10 |
+| Omada Controller | 10.10.10.10 (proposed) |
 | Media/internal-services VM | 10.10.30.20 |
 | SOC VM | 10.10.70.10 |
 | Nextcloud VM | 10.10.80.20 |

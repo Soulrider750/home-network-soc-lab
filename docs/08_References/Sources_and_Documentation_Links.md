@@ -1,6 +1,6 @@
 # Sources and Documentation Links
 
-The four-VM layout, VLAN 81 assignment, private Nextcloud/Jellyfin access, and optional Omada Controller are planning choices. These references support implementation research; they are not deployment evidence.
+The four-VM layout, VLAN 81 assignment, private Nextcloud/Jellyfin access, and separate Omada Controller container on VLAN 10 are planning choices. These references support implementation research; they are not deployment evidence.
 
 ## Vendor documentation
 
@@ -17,4 +17,6 @@ The four-VM layout, VLAN 81 assignment, private Nextcloud/Jellyfin access, and o
 - [OPNsense VLAN and LAGG setup](https://docs.opnsense.org/manual/how-tos/vlan_and_lagg.html)
 - [TP-Link Omada multi-network and SSID VLAN guidance](https://www.tp-link.com/us/support/faq/3091/)
 - [TP-Link Omada management VLAN guidance](https://www.tp-link.com/us/support/faq/4094/)
+- [Omada Controller user guide and backup/restore](https://support.omadanetworks.com/en/document/111217/)
+- [Omada Software Controller Linux installation](https://support.omadanetworks.com/uk/document/13088/)
 - [TP-Link Omada SG3210XHP-M2 product page](https://www.omadanetworks.com/us/business-networking/omada-switch-access-pro/sg3210xhp-m2/)

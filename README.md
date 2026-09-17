@@ -18,15 +18,15 @@ This project plans a segmented home network, public cybersecurity portfolio serv
 | **Media/internal services** | Jellyfin and separately reviewed private services | **30** Servers | Approved Trusted/Media/VPN clients |
 | **SOC** | Wazuh manager, indexer, dashboard, supporting components | **70** SOC | Restricted dashboard and log ingestion |
 
-Docker Compose is planned **inside** the Linux VMs. The NucBox hypervisor's management address stays on VLAN 10. An optional Omada Controller needs a separate Management-zone placement decision. Temporary Attack Lab systems are outside these four persistent NucBox VMs. The broader plan also includes NGINX, `cloudflared`, Nextcloud's database/cache, and Wazuh's supporting components in their respective VMs. The Omada Controller is optional, with Management-zone placement still undecided. AdGuard DNS, Uptime Kuma, CrowdSec/Fail2Ban-style controls, and additional sensing are later candidates that require separate placement and capacity decisions.
+Docker Compose is planned **inside** the Linux VMs. The NucBox hypervisor's management address stays on VLAN 10. The Omada Controller is planned in a separate NucBox management container on VLAN 10; its resource allocation still needs hardware validation. Temporary Attack Lab systems are outside these four persistent NucBox VMs. The broader plan also includes NGINX, `cloudflared`, Nextcloud's database/cache, and Wazuh's supporting components in their respective VMs. AdGuard DNS, Uptime Kuma, CrowdSec/Fail2Ban-style controls, and additional sensing are later candidates that require separate placement and capacity decisions.
 
-The NucBox model, RAM, storage, and virtualization capacity are still to be confirmed. The live KEV dashboard remains on its separately documented Ubuntu deployment until a tested migration is complete; this repository does not claim that the four-VM design is already running.
+The planned NucBox has an Intel Core i9-13900HK, 32 GB DDR5 RAM, and a 1 TB SSD (owner-provided specifications). The exact NucBox SKU, usable storage, virtualization support, and workload capacity still need validation. The live KEV dashboard remains on its separately documented Ubuntu deployment until a tested migration is complete; this repository does not claim that the four-VM design is already running.
 
 ## Network and trust boundaries
 
 | VLAN | Zone | Planned purpose |
 |---:|---|---|
-| 10 | Management | OPNsense, Omada, NucBox hypervisor, optional Controller |
+| 10 | Management | OPNsense, Omada switch/AP, NucBox hypervisor, Omada Controller |
 | 20 | Trusted | Personal and approved admin devices |
 | 30 | Servers | Jellyfin and other private services |
 | 40 | Media | TVs, streaming devices, consoles |
@@ -48,7 +48,7 @@ Public visitor → Cloudflare HTTPS → outbound tunnel
 
 Approved local or VPN user → OPNsense → Nextcloud VM, VLAN 80
 Approved local or VPN user → OPNsense → Jellyfin VM, VLAN 30
-Approved admin or VPN user → restricted Management / SOC interfaces
+Approved admin or VPN user → Management (including Omada Controller) / SOC interfaces
 ```
 
 The public-project connector needs only its own site origins and documented Cloudflare egress, including UDP/TCP 7844. The KEV and portfolio websites need no inbound WAN port forward or static public IP when published exclusively through that tunnel. Nextcloud and Jellyfin remain private; Wazuh, Docker, OPNsense, Omada, and hypervisor management receive no public hostname. Cloudflare Tunnel publication alone does not authenticate visitors.
@@ -72,8 +72,8 @@ All four VMs share the NucBox's physical failure risk. Keep each VM's data, depl
 
 ### Still to implement and verify
 
-- [ ] Confirm NucBox model, RAM, storage, virtualization support, and capacity
-- [ ] Configure OPNsense and Omada VLAN 81 and test default-deny routing
+- [ ] Record the exact NucBox SKU; verify the i9-13900HK, 32 GB DDR5 RAM, 1 TB SSD, virtualization support, usable storage, and capacity for four VMs plus the Omada management container
+- [ ] Configure OPNsense and Omada VLAN 81; adopt switch/AP into the Omada Controller and test VLANs and default-deny routing
 - [ ] Install hypervisor with management on VLAN 10 and VLAN-aware bridge
 - [ ] Create and harden the four VMs in stages
 - [ ] Deploy and test Nextcloud, Jellyfin, Wazuh, and portfolio workloads
@@ -99,6 +99,7 @@ All four VMs share the NucBox's physical failure risk. Keep each VM's data, depl
 
 - [OPNsense Interface and VLAN Plan](docs/02_OPNsense_and_Omada_Config/01_OPNsense_Interface_and_VLAN_Plan.md)
 - [Omada Switch and Access Point Plan](docs/02_OPNsense_and_Omada_Config/02_TP_Link_Omada_Switch_and_AP_Plan.md)
+- [Omada Controller Plan](docs/02_OPNsense_and_Omada_Config/03_Omada_Controller_Plan.md)
 
 ### NucBox VMs and services
 

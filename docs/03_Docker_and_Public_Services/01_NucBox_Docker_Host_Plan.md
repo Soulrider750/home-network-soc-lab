@@ -4,7 +4,7 @@
 
 This is the **planned** NucBox architecture. The four VMs, VLAN 81, and service migrations have not been validated or deployed as part of this documentation update. The live KEV dashboard currently has its own Ubuntu deployment; moving it to the NucBox is a separate, tested cutover.
 
-The NucBox model, available RAM, storage, and virtualization support must be confirmed before assigning VM resources. Measure Wazuh indexing, Nextcloud storage, Jellyfin transcoding, backup size, and total host headroom before committing to simultaneous operation. Build the four VMs in phases rather than assuming all workloads fit at once.
+The owner-provided host specifications are an Intel Core i9-13900HK, 32 GB DDR5 RAM, and a 1 TB SSD. Record the exact NucBox SKU and verify installed hardware, usable storage after the hypervisor and VM disks, and virtualization support before assigning resources. The 32 GB RAM and 1 TB SSD are shared across the hypervisor, four VMs, and Omada management container. Measure Wazuh indexing and retention, Nextcloud storage growth, Jellyfin transcoding and media storage, backup size, and total host headroom before committing to simultaneous operation. Build the four VMs in phases rather than assuming all workloads fit at once.
 
 ## Host and VM layout
 
@@ -17,7 +17,7 @@ Use a virtualization platform such as Proxmox VE on the NucBox. Run Docker Compo
 | Media/internal services | Jellyfin and future private services after individual review | 30 | Trusted/Media clients and VPN |
 | SOC | Wazuh manager, indexer, dashboard, and supporting components | 70 | Restricted administration and log ingestion only |
 
-The optional Omada Controller remains a management-zone decision, not an automatic fifth workload or a reason to give an application VM access to VLAN 10. If hosted on the NucBox, decide its isolated placement and resource cost before deployment.
+The Omada Controller is planned in a dedicated management container on the NucBox, with a VLAN 10 interface and no application VM interface. Its resource allocation and container compatibility still need validation against the actual hardware and selected controller version. Do not give an application VM a VLAN 10 interface merely to host the controller.
 
 Attack Lab test VMs are separate, temporary lab resources and are not part of these four persistent NucBox VMs.
 
@@ -28,11 +28,11 @@ Attack Lab test VMs are separate, temporary lab resources and are not part of th
 | NGINX and `cloudflared` | Supporting services in the Public-projects VM |
 | Nextcloud database and cache | Supporting services inside the Nextcloud VM |
 | Wazuh manager, indexer, and dashboard | Supporting services inside the SOC VM |
-| Omada Controller | Optional; Management VLAN placement to be decided separately |
+| Omada Controller | Dedicated NucBox management container on VLAN 10; validate capacity and compatibility before deployment |
 | AdGuard DNS, Uptime Kuma, and CrowdSec/Fail2Ban-style controls | Possible later additions; choose a VM/zone, resource budget, and access policy before deployment |
 | Suricata/Zeek sensing | Later network-monitoring work; placement must follow a separate visibility and capacity design |
 
-These possibilities do not add a fifth persistent NucBox VM to the current plan.
+The controller container and these possible later services do not add a fifth persistent NucBox VM to the current plan.
 
 ## One-NIC network design
 
