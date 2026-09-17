@@ -1,63 +1,47 @@
 # Hardening, Backup, and Operations Plan
 
-## Infrastructure Hardening
+## Infrastructure hardening
 
-| Area | Control |
+| Area | Planned control |
 |---|---|
-| OPNsense | Disable WAN management, strong admin password, restrict GUI to Management VLAN, regular config backups |
-| Switch | Management VLAN only, disable unused ports, VLAN 99 for parking, update firmware |
-| AP | Management VLAN only, strong admin credentials, separate SSIDs, guest isolation |
-| NucBox | SSH keys, restricted admin access, host firewall, regular updates, Wazuh agent |
-| Docker | Separate Compose projects, least exposed ports, no public Docker socket, backups of Compose files |
-| Nextcloud | MFA, trusted domains/proxies, updates, backups, limited apps |
-| Jellyfin | Strong accounts, no direct WAN exposure, admin access restricted |
-| NGINX | HTTPS, logs, rate limits, security headers, no unnecessary exposed paths |
-| Wazuh | Admin access restricted, dashboards not public, monitored storage capacity |
+| OPNsense | Restrict GUI to approved Management/VPN clients; default-deny inter-VLAN rules; export configuration |
+| Omada switch/AP | Management VLAN 10; controlled trunks; disabled/parked unused ports; firmware updates |
+| NucBox hypervisor | Management VLAN 10 only; restricted admin access; updates; VLAN-aware bridge; no inter-VLAN routing |
+| Four guest VMs | Minimal guest OS; distinct credentials, disks, Compose projects, patching, and guest firewalls |
+| Public-projects VM | No personal-data mounts; protected tunnel credential; NGINX/app logs; no inbound WAN forward |
+| Nextcloud VM | MFA, trusted domains/proxies when relevant, private access, application-consistent backup |
+| Media/internal-services VM | Private Jellyfin access; approved media mounts; restricted admin interface |
+| SOC VM | Private Wazuh dashboard; bounded log/index storage; monitored ingestion rules |
 
-## Backup Plan
+The optional Omada Controller needs a separate Management-zone placement decision. Keep VPN, hypervisor, Docker, OPNsense, and Wazuh administration off public hostnames.
 
-| Asset | Backup Method | Frequency |
-|---|---|---|
-| OPNsense config | Export encrypted config backup | After major changes and monthly |
-| Switch/AP config | Export Omada backup | After major changes and monthly |
-| Docker Compose files | Private repo or backup folder | After changes |
-| Nextcloud database | Database dump | Daily or weekly |
-| Nextcloud data | File backup to external drive/NAS | Daily or weekly |
-| Jellyfin config | Config backup | Weekly |
-| Jellyfin media | External drive/NAS backup | Based on change rate |
-| Wazuh config | Config backup | Weekly/monthly |
-| Important screenshots/docs | Portfolio backup | After each lab phase |
+## Backup plan
 
-## Recovery Tests
-
-A backup plan is only useful if restore is tested. Document at least one restore test for:
-
-- OPNsense config import.
-- Nextcloud database and data restore.
-- Jellyfin config restore.
-- Docker Compose redeployment.
-
-## Operational Routine
-
-| Task | Cadence |
+| Asset | Planned recovery copy |
 |---|---|
-| Review Wazuh alerts | Weekly during project phase |
-| Review OPNsense firewall logs | Weekly |
-| Check backups | Weekly |
-| Apply OS/container updates | Monthly or as needed |
-| Export config backups | After major changes |
-| Capture portfolio screenshots | After each detection scenario |
-| Review firewall rules | Monthly or after topology changes |
+| OPNsense and Omada configuration | Export after changes and verify import/recovery path |
+| Hypervisor configuration and VM definitions | Off-host copy sufficient to rebuild VLAN-aware bridge and guests |
+| Public-projects VM | Versioned deployment config, KEV data, portfolio files, tunnel configuration/credential held separately, and tested restore |
+| Nextcloud VM | Coordinated app files, user data, configuration, database, and cache rebuild procedure |
+| Media/internal-services VM | Jellyfin config/metadata and chosen media scope |
+| SOC VM | Wazuh configuration, rules, and retention/rebuild plan; size log backups deliberately |
+| Documentation and sanitized evidence | Versioned repository plus separate recovery copy |
 
-## Future Improvements
+Use a separate encrypted USB drive or NAS for off-host copies; confirm capacity against Nextcloud data, media, and Wazuh retention. Maintain an additional offline/off-site copy for critical data. A VM snapshot alone is not an application-consistent or off-host backup. Backup frequency, retention, and acceptable data loss are decisions to confirm after measurement; do not describe backups as automated until implemented.
 
-1. Add a UPS for modem, firewall, switch, AP, and NucBox.
-2. Add external storage or NAS for more reliable backups.
-3. Add WireGuard VPN for secure remote administration.
-4. Add Suricata on OPNsense after baseline rules are stable.
-5. Add Zeek or a dedicated IDS sensor using switch port mirroring.
-6. Add a USB/Thunderbolt 2.5GbE adapter or future host with multiple NICs for stronger service separation.
-7. Consider Proxmox later if you want stronger isolation between Wazuh, DMZ, and server workloads.
-8. Add CrowdSec or Fail2Ban-style protection for public service logs.
-9. Add uptime monitoring with Uptime Kuma.
-10. Add asset inventory and vulnerability scan reports.
+## Restore and acceptance tests
+
+- Restore one guest from off-host backup onto isolated storage and verify its assigned VLAN.
+- Restore Nextcloud database and data as a matched set.
+- Restore Jellyfin configuration and selected media.
+- Restore KEV data and private serving, then test its public hostname and refresh schedule before retiring the old deployment.
+- Rebuild Wazuh configuration and verify agents/log delivery.
+- Confirm that restored VMs cannot reach forbidden VLANs.
+
+## Operational routine
+
+Review firewall denials, tunnel health, public HTTP responses, guest/host updates, Wazuh alerts, backup success, free storage, and restore evidence on a schedule chosen during implementation. Record capacity measurements before deciding whether a second physical host is needed.
+
+## Later improvements
+
+A UPS, additional off-host storage, IDS/IPS, uptime monitoring, and a separate public-project host remain possible future work. Deploy any new service only after choosing its VM, VLAN, access path, resource budget, and backup/monitoring plan.

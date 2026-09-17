@@ -1,41 +1,37 @@
-# Final Logical Topology
+# Planned Logical Topology
 
-## Diagram
+The four-VM arrangement below supersedes the original single-Docker-host design. It is a proposed architecture pending installation and validation.
 
-![Final Logical Topology](../../assets/diagrams/logical_topology_final.png)
+![Planned four-VM NucBox topology](../../assets/diagrams/logical_topology_final.png)
 
-## SVG Version
+```mermaid
+flowchart TB
+  Internet --> Cloudflare
+  Cloudflare -- outbound tunnel --> Public["Public-projects VM<br/>VLAN 81: KEV + portfolio + NGINX + cloudflared"]
+  Internet --> OPNsense["OPNsense on Protectli<br/>VLAN gateways + firewall + VPN"]
+  OPNsense --> Switch["Omada managed switch"]
+  Switch --> AP["Omada AP<br/>client VLANs"]
+  Switch -- "802.1Q trunk: 10, 30, 70, 80, 81" --> NucBox["NucBox hypervisor<br/>management VLAN 10"]
+  NucBox --> Public
+  NucBox --> Nextcloud["Nextcloud VM<br/>VLAN 80: app + database + cache"]
+  NucBox --> Media["Media/internal-services VM<br/>VLAN 30: Jellyfin + private services"]
+  NucBox --> SOC["SOC VM<br/>VLAN 70: Wazuh"]
+  OPNsense -- "approved VPN and local routes" --> Nextcloud
+  OPNsense -- "approved VPN, Trusted, Media routes" --> Media
+  Public -. "logs only" .-> SOC
+  Nextcloud -. "logs only" .-> SOC
+  Media -. "logs only" .-> SOC
+```
 
-The SVG version is stored here:
+OPNsense routes between VLANs and enforces default-deny policy. The NucBox bridge assigns VLAN tags to VMs but must not act as an inter-VLAN router. Two devices inside one VLAN, or two containers inside one VM, can exchange traffic without crossing OPNsense; the public VM and Nextcloud therefore use different VLANs.
 
-`../../assets/diagrams/logical_topology_final.svg`
+| Flow | Planned path |
+|---|---|
+| Public KEV/portfolio | Visitor → Cloudflare HTTPS → public-project tunnel → NGINX/origin in VLAN 81 |
+| Private Nextcloud | Approved Trusted/VPN client → OPNsense → VLAN 80 |
+| Private Jellyfin | Approved Trusted/Media/VPN client → OPNsense → VLAN 30 |
+| Administration | Approved admin/VPN source → Management VLAN 10 or restricted SOC/application admin endpoint |
+| Monitoring | Approved source → Wazuh ingestion on VLAN 70 |
+| Attack testing | Isolated VLAN 90 → explicitly approved lab target only |
 
-## Topology Explanation
-
-The topology has four major layers:
-
-1. **Edge layer:** Internet, ISP modem, and OPNsense firewall.
-2. **Switching and wireless layer:** TP-Link Omada SG3210XHP-M2 managed switch and TP-Link Omada BE5000 access point.
-3. **Service layer:** GMKtec NucBox Docker host running NGINX, Nextcloud Server, Jellyfin Server, and Wazuh.
-4. **Security zones:** VLANs for Management, Trusted, Servers, Media, IoT, Guest, SOC, DMZ, Attack Lab, and Parking/Unused ports.
-
-## Main Traffic Flows
-
-| Flow | Path | Purpose |
-|---|---|---|
-| Normal internet access | Client VLAN → OPNsense → WAN | Everyday browsing and updates |
-| Public Nextcloud access | WAN → OPNsense NAT → DMZ NGINX → Nextcloud Server | HTTPS cloud access |
-| Public Jellyfin access | WAN → OPNsense NAT → DMZ NGINX → Jellyfin Server | HTTPS media access |
-| Internal Jellyfin access | Media/Trusted VLAN → Server VLAN | Local streaming |
-| Management access | Trusted admin device → Management VLAN | Administer OPNsense, switch, AP, and controller |
-| Monitoring flow | Endpoints/services/firewall → Wazuh SOC VLAN | Log collection and alerts |
-| Attack testing | Attack Lab VLAN → approved test targets | Controlled security testing |
-
-## Key Security Boundaries
-
-- Guest devices cannot reach internal VLANs.
-- IoT devices cannot reach Trusted, Management, or Server VLANs by default.
-- DMZ services cannot initiate traffic into Trusted devices.
-- Management interfaces are only reachable from approved admin devices.
-- Public access is limited to HTTPS through NGINX.
-- Attack Lab traffic is blocked by default and only allowed to approved targets during tests.
+No direct WAN forwarding is planned for KEV, portfolio, Nextcloud, Jellyfin, Wazuh, or infrastructure administration. A VPN endpoint on OPNsense may require its own tightly scoped access configuration. The NucBox is still one physical failure domain; off-host backups and restore tests are part of the design.

@@ -1,64 +1,47 @@
 # Firewall Rule Matrix
 
-## Core Policy
+## Core policy
 
-The firewall should follow a default-deny model between VLANs. Only allow traffic that has a clear purpose.
+Use default deny between VLANs. OPNsense is the inter-VLAN gateway. Replace broad zone-to-zone allows with source, destination, protocol, and port rules after each service endpoint is confirmed. No application VM should route between VLANs.
 
-## WAN Rules
+## WAN and tunnel policy
 
-| Source | Destination | Action | Ports | Reason |
-|---|---|---|---|---|
-| WAN | DMZ NGINX | Allow | TCP 443 | Public HTTPS access to Nextcloud and Jellyfin through reverse proxy |
-| WAN | DMZ NGINX | Optional Allow | TCP 80 | HTTP-to-HTTPS redirect or HTTP-01 certificate validation if needed |
-| WAN | OPNsense Management | Block | Any | Do not expose firewall management to the internet |
-| WAN | Nextcloud/Jellyfin direct ports | Block | Any | Do not bypass reverse proxy |
-
-## Inter-VLAN Rules
-
-| Source | Destination | Action | Reason |
+| Source | Destination | Planned action | Purpose |
 |---|---|---|---|
-| Trusted | Internet | Allow | Normal daily use |
-| Trusted admin device | Management | Allow selected ports | Administer OPNsense, switch, AP, and controller |
-| Trusted admin device | SOC | Allow Wazuh dashboard | Review alerts and dashboards |
-| Trusted admin device | Server/DMZ | Allow selected admin ports | Manage Docker services and servers |
-| Trusted | Server | Allow selected service ports | Access Jellyfin and internal services |
-| Trusted | DMZ | Allow HTTPS | Access Nextcloud and public service names internally |
-| Media | Server | Allow Jellyfin application path | Local streaming |
-| Media | Trusted | Block | Protect personal devices |
-| Media | Management | Block | Protect infrastructure |
-| IoT | Internet | Allow limited outbound | Smart device cloud access |
-| IoT | Trusted | Block | Prevent lateral movement to personal devices |
-| IoT | Management | Block | Protect firewall, switch, and AP |
-| IoT | Server | Block by default | Reduce attack paths |
-| Guest | Internet | Allow | Guest internet access |
-| Guest | All internal VLANs | Block | Guest isolation |
-| DMZ NGINX | Nextcloud Server | Allow app port only | Reverse proxy backend access |
-| DMZ NGINX | Jellyfin Server | Allow app port only | Reverse proxy backend access |
-| DMZ | Trusted | Block | Stop public service compromise from spreading |
-| DMZ | Management | Block | Protect infrastructure |
-| Server | Internet | Allow limited outbound | Updates, package downloads, image pulls |
-| Server | Trusted | Block by default | Prevent server compromise from spreading |
-| SOC | Internet | Allow limited outbound | Updates and threat intelligence downloads |
-| Monitored devices | SOC/Wazuh | Allow agent/syslog traffic | Centralized monitoring |
-| Attack Lab | Internet | Allow optional limited outbound | Updates and package downloads |
-| Attack Lab | Internal VLANs | Block by default | Prevent accidental exposure |
-| Attack Lab | Approved test targets | Allow during tests only | Controlled simulations |
-| Any | VLAN 99 | Block | Parking VLAN should not be usable |
+| Internet | KEV, portfolio, Nextcloud, Jellyfin, Wazuh, hypervisor, or management ports | Block inbound | No direct application or management WAN forwards |
+| Internet | OPNsense VPN endpoint | Allow only if configured | Authenticated private remote access |
+| Public-projects VM, VLAN 81 | Cloudflare documented tunnel endpoints | Allow outbound UDP/TCP 7844 | QUIC/HTTP2 connector traffic |
+| Public-projects VM, VLAN 81 | Approved DNS, CISA feed, and software-update destinations | Narrow outbound allow | Resolve, refresh, and patch public sites |
+| Other application VMs | Internet | Narrow outbound allow as needed | Updates and documented dependencies |
 
-## Recommended Management Rule
+Cloudflare's required tunnel destinations can change; verify its current firewall documentation when implementing the rules. Tunnel publication requires no static public IP or inbound WAN port forward for the two public sites.
 
-Create an alias named `ADMIN_DEVICES` containing the IP addresses of your MacBook, Lenovo laptop, or dedicated admin workstation. Allow Management VLAN access only from this alias.
+## Inter-VLAN rules
 
-## Recommended Service Aliases
+| Source | Destination | Planned action | Purpose |
+|---|---|---|---|
+| Approved admin or VPN client | Management VLAN 10 | Allow selected admin ports | OPNsense, switch, AP, hypervisor, optional controller |
+| Approved admin or VPN client | SOC VM, VLAN 70 | Allow dashboard/admin ports | Review alerts |
+| Approved Trusted or VPN client | Nextcloud VM, VLAN 80 | Allow application port only | Private file access |
+| Approved Trusted, Media, or VPN client | Jellyfin VM, VLAN 30 | Allow application port only | Private playback |
+| Media VLAN 40 | Other Server VLAN services and Trusted VLAN | Block | Limit media-client reach |
+| Guest and IoT VLANs | Internal zones | Block by default | Prevent lateral access |
+| Public-projects VM, VLAN 81 | Nextcloud, Server, Trusted, Management, SOC dashboard | Block | Preserve public/personal boundary |
+| Nextcloud VM, VLAN 80 | Public projects, Trusted, Management | Block by default | Prevent lateral access |
+| Monitored hosts/services | Wazuh ingestion endpoint, VLAN 70 | Allow specific agent/syslog ports | Centralized monitoring |
+| Attack Lab VLAN 90 | Internal zones | Block by default | Prevent accidental exposure |
+| Attack Lab VLAN 90 | Approved test target | Temporary allow | Controlled exercise |
+| Any | VLAN 99 | Block | Parking network |
+
+Allow response traffic through stateful rules. A required cross-zone dependency must be documented as an exact exception and tested both ways; a broad public-DMZ-to-Servers rule is not part of this plan. Traffic inside one VLAN or one VM may not traverse OPNsense and needs guest/container controls too.
+
+## Suggested aliases
 
 | Alias | Members |
 |---|---|
-| ADMIN_DEVICES | Approved admin device IPs |
-| PUBLIC_PROXY | NGINX reverse proxy IP |
-| WAZUH_SERVERS | Wazuh manager/indexer/dashboard IPs |
-| SERVER_SERVICES | Jellyfin, storage, database, backup IPs |
-| ATTACK_LAB_TEST_TARGETS | VMs intentionally used for testing |
-
-## Important Note
-
-Since Nextcloud and Jellyfin are public-facing through NGINX, direct exposure of their application ports should be avoided. Public WAN access should terminate at NGINX over HTTPS.
+| ADMIN_DEVICES | Approved administrator device/VPN addresses |
+| PUBLIC_PROJECTS_VM | Public VM address on VLAN 81 |
+| NEXTCLOUD_VM | Nextcloud VM address on VLAN 80 |
+| MEDIA_SERVICES_VM | Media/internal-services VM address on VLAN 30 |
+| WAZUH_INGEST | Wazuh manager ingestion addresses/ports |
+| ATTACK_LAB_TEST_TARGETS | Explicitly approved lab targets |

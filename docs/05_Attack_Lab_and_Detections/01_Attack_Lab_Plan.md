@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Attack Lab VLAN provides a safe place to run controlled tests without placing attack tools on the Trusted VLAN.
+The Attack Lab VLAN provides a controlled place to test systems you own or are authorized to test. Its temporary test VMs are not part of the four persistent NucBox service VMs; their host and capacity must be decided before deployment.
 
 ## Placement
 
@@ -29,9 +29,9 @@ The Attack Lab VLAN provides a safe place to run controlled tests without placin
 | Failed SSH login attempts | SSH/manual attempts or Hydra against test target | Wazuh auth alerts |
 | Port scan | Nmap from Kali to test server | OPNsense logs, Wazuh/IDS event if enabled |
 | Blocked IoT-to-Trusted traffic | Attempt connection from IoT VLAN to Trusted device | OPNsense deny logs |
-| Nextcloud failed login | Browser login attempts to cloud subdomain | Nextcloud logs and Wazuh event |
-| Jellyfin failed login | Browser login attempts to media subdomain | Jellyfin logs and Wazuh event |
-| NGINX suspicious request | Curl/Nikto-style requests against your own service | NGINX logs and Wazuh event |
+| Nextcloud failed login | Approved private/VPN login attempts to the Nextcloud VM | Nextcloud logs and Wazuh event |
+| Jellyfin failed login | Approved local/VPN login attempts to Jellyfin | Jellyfin logs and Wazuh event |
+| NGINX suspicious request | Approved requests against your own public NGINX origin | NGINX logs and Wazuh event |
 | File modification | Change monitored config file | Wazuh FIM alert |
 | Docker event | Restart container | Docker event/log in Wazuh |
 | New Linux user | Create test account on Ubuntu target | Auth/system log alert |

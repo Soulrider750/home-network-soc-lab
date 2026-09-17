@@ -1,103 +1,50 @@
 # Build Phases and Step-by-Step Plan
 
-## Phase 1: Final Design Preparation
+The four-VM architecture is a target state, not a claim that the services have been moved. Keep the existing live KEV origin in service until the NucBox replacement passes its own acceptance checks.
 
-- Confirm hardware purchases: Protectli Vault, Omada SG3210XHP-M2, Omada BE5000 AP.
-- Confirm ISP modem handoff to OPNsense WAN.
-- Request static public IP from ISP.
-- Confirm domain registrar or DNS provider access.
-- Finalize VLAN IDs and subnets.
-- Print/save topology diagram and firewall matrix.
+## Phase 1: Confirm the design
 
-## Phase 2: OPNsense Core Build
+- Confirm NucBox model, virtualization support, RAM, local storage, backup capacity, and room for Wazuh indexing and Jellyfin transcoding.
+- Confirm the OPNsense, Omada switch, AP, trunk port, domain, and DNS inventory.
+- Reserve VLAN 81 (`10.10.81.0/24`) for public projects; retain VLANs 80, 30, 70, and 10 for Nextcloud, internal services, SOC, and management.
+- Save the current topology and firewall plan. A static public IP is not required for the planned public-project tunnel.
 
-- Install OPNsense on the Protectli Vault.
-- Configure WAN on Port 1.
-- Configure LAN trunk on Port 2.
-- Create VLAN interfaces 10,20,30,40,50,60,70,80,90.
-- Assign gateways and DHCP scopes.
-- Configure DNS resolution/forwarding.
-- Create basic outbound NAT.
-- Create default block rules between VLANs.
-- Add temporary allow rules for setup testing.
-- Export initial OPNsense backup.
+## Phase 2: OPNsense and switching
 
-## Phase 3: Omada Switch and AP Build
+- Configure OPNsense WAN, trunk, VLAN gateways, DHCP/DNS, VPN, and default-deny inter-VLAN rules, including VLAN 81.
+- Configure Omada switch Port 3 as the NucBox trunk for VLANs 10, 30, 70, 80, and 81; map SSIDs and access ports.
+- Validate each zone's addressing, allowed traffic, denied traffic, and OPNsense logs before hosting services.
+- Export OPNsense and Omada configuration backups.
 
-- Adopt or configure SG3210XHP-M2.
-- Set switch management to VLAN 10.
-- Configure Port 1 as trunk to OPNsense.
-- Configure Port 2 as trunk + PoE+ to AP.
-- Configure Port 3 as trunk to NucBox.
-- Configure access ports for media/trusted/lab devices.
-- Disable unused ports or assign VLAN 99.
-- Configure Omada BE5000 SSIDs and VLAN tags.
-- Test each SSID receives the correct subnet.
+## Phase 3: NucBox hypervisor and VMs
 
-## Phase 4: NucBox and Docker Build
+- Install and harden a virtualization platform such as Proxmox VE; keep management on VLAN 10 only.
+- Configure a VLAN-aware virtual bridge on the single NucBox Ethernet trunk. Give each application VM only its assigned VLAN.
+- Create the Public-projects, Nextcloud, Media/internal-services, and SOC VMs in stages. Size each from measured use and available host capacity.
+- Install and harden guest operating systems, then Docker Compose inside the VMs as needed. Keep per-VM credentials, data, and configuration separate.
+- Decide optional Omada Controller placement within the Management zone before deploying it.
 
-- Install Linux server OS on the NucBox.
-- Configure the NucBox switch port as trunk.
-- Configure VLAN subinterfaces or document simpler Docker network design.
-- Install Docker and Docker Compose.
-- Create `/srv/docker/` folder structure.
-- Deploy NGINX reverse proxy.
-- Deploy Nextcloud Server stack.
-- Deploy Jellyfin Server.
-- Deploy Wazuh stack.
-- Optional: deploy Omada Controller.
-- Add Wazuh agent to the NucBox host.
+## Phase 4: Private applications and SOC
 
-## Phase 5: Public Service Build
+- Deploy Nextcloud with its database and cache inside the Nextcloud VM; allow approved local and VPN clients only.
+- Deploy Jellyfin in the Media/internal-services VM; allow approved local and VPN clients only.
+- Deploy Wazuh in the SOC VM and onboard OPNsense, the hypervisor, guests, NGINX, applications, and Docker events through narrow log-ingestion rules.
+- Test private access, blocked public access, guest boundaries, and backup/restore for each workload.
 
-- Create DNS records for `cloud.yourdomain.com` and `media.yourdomain.com`.
-- Configure OPNsense NAT for TCP 443 to NGINX DMZ IP.
-- Configure NGINX server blocks for Nextcloud and Jellyfin.
-- Configure TLS certificates.
-- Configure Nextcloud trusted domains and proxies.
-- Confirm Jellyfin access through HTTPS reverse proxy.
-- Confirm no direct WAN exposure of application ports.
+## Phase 5: Public projects
 
-## Phase 6: Firewall Hardening
+- Stage the portfolio and the KEV dashboard in the Public-projects VM with NGINX and a dedicated outbound `cloudflared` connector.
+- Configure public hostnames in Cloudflare Tunnel; do not open WAN forwards to these websites.
+- Test Cloudflare egress, both HTTPS sites, origin and application logs, and blocked access from VLAN 81 into personal-data or management zones.
+- Migrate the KEV dashboard only after its source, data, images, schedules, backup, and rollback checks are complete. Verify the public hostname before retiring the old origin.
 
-- Restrict Management VLAN access to approved admin devices.
-- Block Guest to all internal VLANs.
-- Block IoT to Trusted, Management, Servers, SOC, and DMZ unless explicitly needed.
-- Allow Media to Jellyfin only.
-- Allow NGINX to Nextcloud/Jellyfin backends only.
-- Block DMZ to Trusted.
-- Restrict SOC dashboard access.
-- Restrict Attack Lab traffic except for approved tests.
-- Export OPNsense backup after rules are stable.
+## Phase 6: Security validation and portfolio evidence
 
-## Phase 7: SOC Monitoring
+- Verify VPN-only paths for Nextcloud and Jellyfin and management-only paths for Wazuh and infrastructure.
+- Run authorized, controlled Attack Lab tests against approved targets, with temporary test resources separate from the four service VMs.
+- Capture sanitized firewall, tunnel, VM, application, Wazuh, and restore evidence.
+- Document deviations, measured capacity, recovery limits, and lessons learned.
 
-- Forward OPNsense logs to Wazuh or syslog collection path.
-- Forward NGINX logs.
-- Forward Nextcloud logs.
-- Forward Jellyfin logs.
-- Monitor Docker events.
-- Configure Wazuh FIM paths.
-- Capture baseline dashboard screenshots.
+## Later option
 
-## Phase 8: Detection Validation
-
-- Run failed SSH login test.
-- Run port scan from Attack Lab VLAN.
-- Trigger blocked IoT-to-Trusted traffic.
-- Trigger Nextcloud failed login.
-- Trigger Jellyfin failed login.
-- Trigger NGINX suspicious request event.
-- Trigger file modification alert.
-- Trigger Docker container restart event.
-- Document all alerts and screenshots.
-
-## Phase 9: Portfolio Packaging
-
-- Sanitize screenshots.
-- Complete incident report templates.
-- Complete case study write-up.
-- Add diagrams and tables to GitHub README.
-- Add lessons learned.
-- Add resume bullets and LinkedIn summary.
-- Keep sensitive data out of the public repository.
+Consider a second host such as a ThinkCentre when measured capacity, independent maintenance, or stronger physical separation warrants it. Keep the Public-projects VM and its VLAN policy portable so its host can change without redesigning the public URLs.

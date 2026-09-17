@@ -1,69 +1,29 @@
-# Portfolio Case Study — Planning Milestone
+# Portfolio Case Study — Revised Planning Milestone
 
-## Project Title
+## Project title and status
 
-**Segmented Home Network and SOC Monitoring Lab**
+**Segmented Home Network and SOC Monitoring Lab.** The repository documents a revised target architecture; implementation and validation of the four NucBox VMs remain pending. The separately hosted KEV dashboard is already live, but its NucBox migration is future work.
 
-## Status
+## Problem and proposed solution
 
-**Planning and architecture complete; implementation and validation in progress.**
+A flat home network gives unrelated devices and services more access to each other than they need. This design uses OPNsense and Omada VLANs to separate personal devices, public projects, private applications, monitoring, and controlled test systems.
 
-## Problem Statement
+The NucBox will run four persistent VMs: Public projects on VLAN 81 (KEV dashboard, personal portfolio, NGINX, Cloudflare Tunnel connector); Nextcloud on VLAN 80; Media/internal services on VLAN 30 (Jellyfin); and SOC on VLAN 70 (Wazuh). Docker is planned inside the application VMs. A VLAN-aware bridge and switch trunk connect them, while OPNsense enforces default-deny inter-VLAN rules. The hypervisor management interface stays on VLAN 10.
 
-A flat home network places unrelated devices in the same trust boundary. Personal computers, guest devices, IoT systems, media clients, infrastructure management interfaces, and public-facing services may be able to communicate more broadly than necessary. This increases lateral-movement risk and makes monitoring and troubleshooting more difficult.
+Public sites use an outbound Cloudflare Tunnel; Nextcloud and Jellyfin use approved local/VPN access. Wazuh and infrastructure administration remain private. The optional Omada Controller requires a Management-zone placement decision.
 
-## Proposed Solution
+## Planning deliverables
 
-The planned solution separates devices and services into VLANs based on trust level and function. OPNsense will control routing and enforce a default-deny firewall policy. TP-Link Omada equipment will provide wired and wireless segmentation. Public services will be available only through an NGINX HTTPS reverse proxy in the DMZ. Wazuh will centralize security logs, file integrity alerts, and validation evidence. An isolated Attack Lab VLAN will support controlled tests against approved lab targets.
+- Four-VM service placement and VLAN 81 public-project zone.
+- Revised OPNsense, Omada trunk, firewall, DNS, and access plans.
+- Separate public-tunnel, Nextcloud, Jellyfin, and Wazuh plans.
+- Build phases, controlled tests, backup and restore requirements.
+- Capacity and migration acceptance criteria.
 
-## Planning Deliverables Completed
+## Key tradeoff and validation
 
-- Logical topology
-- VLAN and subnet plan
-- Static addressing recommendations
-- OPNsense physical-interface and VLAN plan
-- Switch trunk and access-port map
-- Wireless SSID-to-VLAN plan
-- Default-deny firewall rule matrix
-- NucBox and Docker service architecture
-- NGINX reverse-proxy and public-service plan
-- Nextcloud and Jellyfin security requirements
-- Wazuh log-source and file integrity monitoring plan
-- Attack Lab safety rules and validation scenarios
-- Hardening, backup, restore, and operations plan
-- Portfolio evidence checklist
+VMs and VLANs give meaningful logical separation, while all four VMs still share a physical NucBox, its storage, and failure risk. The model/RAM/storage and workload capacity remain to be confirmed. The design does not claim that a VM bridge or Docker network automatically sends same-zone traffic through OPNsense.
 
-## Security Principles Applied
+Implementation evidence should include VLAN placement, denied public-to-private traffic, private VPN access, public tunnel responses, application and Wazuh logs, measured resource use, and off-host restore tests. The KEV cutover requires separate verified operational evidence before the existing origin is retired.
 
-- Least privilege
-- Default deny
-- Network segmentation
-- Defense in depth
-- Reduced public attack surface
-- Separation of management traffic
-- Centralized monitoring
-- Controlled validation
-- Secure remote administration
-- Backup and recovery planning
-
-## Key Tradeoff
-
-The planned environment uses one NucBox host for several services that logically belong to different zones. VLAN subinterfaces, Docker networks, host firewall rules, and OPNsense policy can reduce exposure, but this design is not equivalent to physical separation. The limitation is accepted for the initial home-lab build because of cost and simplicity, and a future version may separate workloads with virtual machines or dedicated hosts.
-
-## Planned Validation Evidence
-
-- Correct DHCP assignment by VLAN
-- Blocked Guest and IoT access to internal networks
-- Restricted administrator access to Management and SOC interfaces
-- HTTPS-only public access through NGINX
-- No direct public application or management ports
-- OPNsense firewall deny logs
-- Failed-authentication alerts
-- Port-scan evidence
-- File integrity monitoring alerts
-- Docker event monitoring
-- Backup restoration results
-
-## Professional Relevance
-
-The planning stage demonstrates the ability to translate a security problem into a documented technical architecture. The implementation stage will demonstrate network administration, firewall configuration, Linux and Docker deployment, reverse-proxy configuration, SIEM onboarding, detection validation, troubleshooting, and evidence-based reporting.
+This document describes planning skills. VM deployment, firewall effectiveness, recovery, and detection outcomes become demonstrated skills only after testing and evidence capture.

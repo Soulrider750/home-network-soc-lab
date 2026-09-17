@@ -2,35 +2,32 @@
 
 ## Purpose
 
-This project builds a segmented home network and SOC monitoring lab that supports normal home use while also serving as a serious IT and cybersecurity portfolio project.
-
-The network separates devices by trust level and function. Personal devices, IoT devices, guests, media devices, management interfaces, public-facing services, internal services, SOC monitoring tools, and attack testing systems each receive their own VLAN and firewall policy.
+This project plans a segmented home network and SOC monitoring lab that supports normal home use and public portfolio projects. The network separates personal devices, media clients, guests, IoT devices, management interfaces, public sites, private applications, SOC tools, and attack-testing systems by trust level.
 
 ## Goals
 
-1. Build a functional home network using professional design concepts.
-2. Implement VLAN segmentation with OPNsense and a managed Omada switch.
-3. Map multiple wireless SSIDs to VLANs through the Omada BE5000 AP.
-4. Host Nextcloud Server, Jellyfin Server, Wazuh, and NGINX on the NucBox with Docker.
-5. Expose Nextcloud and Jellyfin safely through HTTPS reverse proxy instead of direct application port forwards.
-6. Centralize logs and detection evidence in Wazuh.
-7. Run controlled attack simulations from an isolated Attack Lab VLAN.
-8. Package the project into a portfolio-ready case study.
+1. Build the network with OPNsense, a managed Omada switch, and VLAN-mapped wireless SSIDs.
+2. Use default-deny routing between security zones.
+3. Run four persistent VMs on the NucBox: Public projects, Nextcloud, Media/internal services, and SOC.
+4. Host the CISA KEV dashboard and personal portfolio in the Public-projects VM on VLAN 81, reached through its own outbound Cloudflare Tunnel.
+5. Keep Nextcloud on VLAN 80 and Jellyfin on VLAN 30 private to approved local/VPN users.
+6. Centralize logs and controlled detection evidence in Wazuh on VLAN 70.
+7. Document implementation, validation, backup restoration, and lessons learned without presenting planned work as deployed.
 
-## Why This Project Matters
+## Planned architecture
 
-A normal home network is usually flat. That means a compromised IoT device, guest device, or media device may be able to reach personal laptops, phones, file shares, or server services. This project reduces that risk by separating the network into trust zones and only allowing necessary traffic.
+| Layer | Responsibility |
+|---|---|
+| OPNsense on Protectli | WAN, VLAN gateways, default-deny inter-VLAN firewall, VPN, DNS/DHCP, and logging |
+| Omada switch and AP | Physical VLAN trunk, access ports, PoE, and VLAN-mapped SSIDs |
+| NucBox hypervisor | VLAN-aware bridge, four isolated application VMs, management on VLAN 10 |
+| Public-projects VM, VLAN 81 | KEV dashboard, portfolio, NGINX, and public-project tunnel connector |
+| Nextcloud VM, VLAN 80 | Nextcloud, database, cache, and private access path |
+| Media/internal-services VM, VLAN 30 | Jellyfin and reviewed future private services |
+| SOC VM, VLAN 70 | Wazuh manager, indexer, dashboard, and supporting components |
 
-For IT roles, the project demonstrates network design, subnetting, VLANs, DHCP, DNS, managed switching, wireless segmentation, Docker hosting, and troubleshooting.
+Docker Compose is planned inside the application VMs. The optional Omada Controller needs a separate Management-zone placement decision; it is not assigned to a public or personal-data VM by default. Attack Lab test VMs are temporary resources outside the four persistent NucBox VMs.
 
-For cybersecurity roles, the project demonstrates firewall policy, segmentation, DMZ design, public service hardening, log collection, Wazuh SIEM use, simulated attack detection, and incident documentation.
+## Current boundary
 
-## Final Architecture Summary
-
-- OPNsense handles WAN access, VLAN gateways, DHCP, DNS forwarding, NAT, firewall rules, VPN, and logging.
-- The TP-Link Omada SG3210XHP-M2 acts as the core managed switch.
-- The TP-Link Omada BE5000 provides VLAN-mapped SSIDs.
-- The NucBox hosts Docker services on trunked VLANs or carefully separated Docker networks.
-- NGINX handles public HTTPS reverse proxy for Nextcloud and Jellyfin.
-- Wazuh collects security logs and provides SOC evidence.
-- VLAN 90 provides an isolated space for simulated attacks and controlled testing.
+This repository is planning documentation. The revised four-VM design and migration are not deployed or validated by this update. The KEV dashboard already has a separate live Ubuntu deployment; its move to the NucBox must follow a verified cutover. The NucBox model, RAM, and storage are still to be confirmed before resource allocation.

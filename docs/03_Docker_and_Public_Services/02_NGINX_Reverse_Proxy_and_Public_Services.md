@@ -1,57 +1,36 @@
-# NGINX Reverse Proxy and Public Services
+# Public Projects and Cloudflare Tunnel Plan
 
 ## Purpose
 
-NGINX provides the single public HTTPS entry point for Nextcloud and Jellyfin. Public users should never connect directly to Nextcloud or Jellyfin application ports.
+The public-projects VM on VLAN 81 will host the CISA KEV dashboard and personal portfolio. NGINX serves or routes the approved web origins, and a dedicated `cloudflared` connector establishes an **outbound** tunnel to Cloudflare. This is the public access plan for those two sites only. The existing live KEV deployment is not changed by this plan.
 
-## Public Names
-
-| Public Name | Service | Backend |
-|---|---|---|
-| `cloud.yourdomain.com` | Nextcloud Server | Nextcloud container/service |
-| `media.yourdomain.com` | Jellyfin Server | Jellyfin container/service |
-
-## Recommended Public Flow
+## Proposed request path
 
 ```text
-Internet
-  ↓
-Static public IP
-  ↓
-OPNsense WAN NAT: TCP 443 only
-  ↓
-NGINX reverse proxy in VLAN 80 DMZ
-  ↓
-Nextcloud Server or Jellyfin Server backend
+Visitor → HTTPS at Cloudflare → outbound Cloudflare Tunnel
+        → public-projects VM, VLAN 81 → NGINX
+        → KEV dashboard or portfolio site
 ```
 
-## Firewall Exposure
+| Service | Planned exposure | Data boundary |
+|---|---|---|
+| KEV dashboard | Public hostname through the public-project tunnel | Dashboard-generated data and configuration stay in the public VM |
+| Personal portfolio | Public hostname through the same public-project tunnel | Static site and deployment configuration stay in the public VM |
+| Nextcloud | Private trusted/VPN access in VLAN 80 | No route from the public-project connector |
+| Jellyfin | Private trusted/Media/VPN access in VLAN 30 | No public-tunnel video route |
+| Wazuh and administration | Private management access | No public hostname |
 
-| Source | Destination | Port | Purpose |
-|---|---|---|---|
-| WAN | NGINX DMZ IP | TCP 443 | HTTPS public access |
-| WAN | NGINX DMZ IP | TCP 80 optional | Redirect or certificate validation |
-| WAN | Nextcloud direct | Block | Do not expose directly |
-| WAN | Jellyfin direct | Block | Do not expose directly |
-| WAN | Wazuh/OPNsense/Switch/AP | Block | Never expose management |
+A tunnel can map more than one hostname to separate local services. Keep its credentials outside Git and restrict the connector to the origins it actually serves. Cloudflare Tunnel itself does not add authentication to a published public hostname. If any private application is later published, use a separate access design and connector rather than broadening this public connector across VLANs.
 
-## Recommended NGINX Controls
+## Network policy
 
-- TLS certificates through Let's Encrypt or another trusted certificate authority.
-- HTTP-to-HTTPS redirect.
-- Security headers where compatible.
-- Rate limiting for authentication-heavy paths.
-- Upload/request body size adjusted for Nextcloud needs.
-- Separate access and error logs for Nextcloud and Jellyfin.
-- Logs forwarded to Wazuh.
-- No direct exposure of Docker socket.
-- No public admin panels.
+- No inbound WAN port forward is required for the KEV dashboard or portfolio when served exclusively through the tunnel. A static public IP is not a dependency for these sites.
+- Allow the public connector outbound traffic to Cloudflare's documented tunnel endpoints on UDP 7844 (QUIC) and TCP 7844 (HTTP/2), plus required DNS and update traffic. Recheck the current Cloudflare destination list before implementation.
+- Permit only the public VM's necessary outbound feed retrieval, updates, and log delivery. Block public-project access to Nextcloud data, Jellyfin, Wazuh administration, and the Management VLAN.
+- Keep NGINX access/error logs and application logs for Wazuh. OPNsense can see the encrypted tunnel connection, not the visitors' underlying HTTP requests.
 
-## Certificate Options
+## Validation and migration
 
-- HTTP-01 validation can work if TCP 80 is temporarily or permanently forwarded to NGINX.
-- DNS-01 validation is cleaner if your DNS provider supports API-based certificate automation.
+Verify the VLAN and hypervisor bridge, private NGINX origins, tunnel target, public HTTPS responses, both hostnames, logging, backup restore, and blocked public-to-personal paths. Move the KEV dashboard only through its own verified backup and release workflow. The new deployment must pass external and operational checks before the current live origin is retired.
 
-## Split DNS Recommendation
-
-Use OPNsense host overrides or internal DNS so internal devices resolve `cloud.yourdomain.com` and `media.yourdomain.com` to the internal NGINX DMZ IP. This avoids unnecessary hairpin NAT issues and makes internal access cleaner.
+Cloudflare's current public-route guidance calls for a specific paid service to serve video and other large files. This plan keeps Jellyfin and private Nextcloud transfers off the ordinary public tunnel.
