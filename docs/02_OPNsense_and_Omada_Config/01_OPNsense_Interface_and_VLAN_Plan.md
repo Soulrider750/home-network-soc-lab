@@ -1,65 +1,41 @@
 # OPNsense Interface and VLAN Plan
 
-## Hardware
+## Hardware and responsibilities
 
-Firewall appliance: Protectli Vault V1410-4 Port micro appliance.
+The planned firewall is a Protectli Vault V1410 running OPNsense. It supplies WAN connectivity, VLAN gateways, DHCP/DNS, default-deny inter-VLAN policy, VPN access, and logs to Wazuh. The NucBox hypervisor and switch do not route between zones.
 
-## Physical Port Plan
+| Protectli port | Planned role |
+|---|---|
+| Port 1 | ISP/WAN |
+| Port 2 | Trunk to Omada switch; VLANs 10–90 including new VLAN 81 |
+| Port 3 | Optional emergency maintenance path |
+| Port 4 | Future use |
 
-| Protectli Port | OPNsense Role | Purpose |
-|---|---|---|
-| Port 1 | WAN | Connects to ISP modem |
-| Port 2 | LAN trunk | Connects to TP-Link Omada SG3210XHP-M2 and carries VLANs 10-90 |
-| Port 3 | Emergency/Maintenance | Optional direct admin access or isolated break-glass network |
-| Port 4 | Future Use | Optional second WAN, dedicated lab network, or future expansion |
+## Routed VLANs
 
-## OPNsense Responsibilities
+| Interface | VLAN | Purpose |
+|---|---:|---|
+| MGMT | 10 | Infrastructure and hypervisor administration |
+| TRUSTED | 20 | Personal and approved admin devices |
+| SERVERS | 30 | Jellyfin and private services |
+| MEDIA | 40 | Media clients |
+| IOT | 50 | Smart-home devices |
+| GUEST | 60 | Visitors |
+| SOC | 70 | Wazuh |
+| NEXTCLOUD | 80 | Private Nextcloud application zone |
+| PUBLIC_PROJECTS | 81 | KEV dashboard and portfolio tunnel origin |
+| ATTACKLAB | 90 | Controlled test systems |
 
-- WAN interface and internet connectivity
-- VLAN interfaces and gateways
-- DHCP scopes or reservations
-- DNS forwarding/resolution
-- NAT and port forwarding
-- Inter-VLAN firewall rules
-- WireGuard VPN for secure remote admin
-- Syslog/log forwarding to Wazuh
-- Optional IDS/IPS after the base design is stable
+Create each interface and gateway on the OPNsense LAN trunk. Validate DHCP/reservations, DNS, outbound updates, and default-deny behavior from each zone. VLAN 99 remains an unrouted switch parking VLAN.
 
-## VLAN Interface Creation
+## WAN and remote access
 
-Create VLAN interfaces on the LAN trunk parent interface. Assign each VLAN as its own interface in OPNsense.
+The KEV dashboard and portfolio use an outbound Cloudflare Tunnel from VLAN 81, so they need no public WAN port forward or static public IP. Nextcloud and Jellyfin are private local/VPN services. Do not forward their application ports, Wazuh, Docker, SSH, hypervisor, OPNsense GUI, switch, or AP management to WAN.
 
-Recommended interface names:
+Plan WireGuard or another approved VPN on OPNsense for private remote access. Scope VPN clients to the Nextcloud, Jellyfin, and administrative paths they actually need. A VPN endpoint may need its own narrowly scoped WAN rule; confirm its protocol, port, and authentication design during implementation.
 
-| Interface Name | VLAN | Description |
-|---|---|---|
-| MGMT | 10 | Management |
-| TRUSTED | 20 | Trusted devices |
-| SERVERS | 30 | Internal servers |
-| MEDIA | 40 | Media devices |
-| IOT | 50 | IoT devices |
-| GUEST | 60 | Guest Wi-Fi |
-| SOC | 70 | Wazuh monitoring |
-| DMZ | 80 | Public-facing services |
-| ATTACKLAB | 90 | Simulated attack lab |
+## DNS and logging
 
-## NAT and Public Services
+Use public DNS only for the two approved public-site hostnames mapped to the public-project tunnel. Resolve private Nextcloud and Jellyfin names through internal DNS or VPN DNS; do not assume a public hostname grants access control. Forward OPNsense firewall and VPN events to the Wazuh ingestion endpoint through a specific rule.
 
-Only forward WAN traffic to the NGINX reverse proxy in the DMZ.
-
-| WAN Port | Forward To | Purpose |
-|---|---|---|
-| TCP 443 | 10.10.80.10 | HTTPS reverse proxy |
-| TCP 80 | 10.10.80.10, optional | Redirect to HTTPS or certificate validation |
-
-Do not forward WAN traffic directly to Nextcloud, Jellyfin, Wazuh, Docker, SSH, OPNsense management, switch management, or AP management.
-
-## DNS Notes
-
-- Use AdGuard DNS as the resolver/filtering service if desired.
-- Domain records for `cloud.yourdomain.com` and `media.yourdomain.com` must be set at the authoritative DNS provider for the domain.
-- Use OPNsense host overrides or split DNS so internal clients resolve public service names to the internal NGINX DMZ address when appropriate.
-
-## Recommended VPN
-
-Add WireGuard on OPNsense for remote administration. Remote management should happen over VPN, not through public web management interfaces.
+Export the OPNsense configuration after baseline setup and major policy changes, then test recovery.

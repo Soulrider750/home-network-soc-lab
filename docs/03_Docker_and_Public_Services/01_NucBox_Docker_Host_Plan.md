@@ -1,72 +1,54 @@
-# NucBox Docker Host Plan
+# NucBox Four-VM Host Plan
 
-## Hardware
+## Status and scope
 
-GMKtec NucBox Mini PC Workstation:
+This is the **planned** NucBox architecture. The four VMs, VLAN 81, and service migrations have not been validated or deployed as part of this documentation update. The live KEV dashboard currently has its own Ubuntu deployment; moving it to the NucBox is a separate, tested cutover.
 
-- Intel i9-13900HK
-- 32GB DDR5 RAM
-- 1TB SSD
-- One Ethernet port
+The NucBox model, available RAM, storage, and virtualization support must be confirmed before assigning VM resources. Measure Wazuh indexing, Nextcloud storage, Jellyfin transcoding, backup size, and total host headroom before committing to simultaneous operation. Build the four VMs in phases rather than assuming all workloads fit at once.
 
-## Role
+## Host and VM layout
 
-The NucBox is the central service host for:
+Use a virtualization platform such as Proxmox VE on the NucBox. Run Docker Compose **inside** the Linux application VMs, not as one shared Docker environment on the hypervisor. The hypervisor management interface belongs only on VLAN 10.
 
-- NGINX reverse proxy
-- Nextcloud Server
-- Jellyfin Server
-- Wazuh SIEM
-- Optional Omada Controller
+| Persistent VM | Workloads and supporting components | VLAN | Access |
+|---|---|---:|---|
+| Public projects | CISA KEV dashboard, personal portfolio, NGINX web origin/reverse proxy, public-project Cloudflare Tunnel connector | 81 | Public websites through an outbound tunnel; no inbound WAN forward |
+| Nextcloud | Nextcloud app, database, cache, and any proxy specifically needed for it | 80 | Trusted clients or VPN; no public hostname in the baseline |
+| Media/internal services | Jellyfin and future private services after individual review | 30 | Trusted/Media clients and VPN |
+| SOC | Wazuh manager, indexer, dashboard, and supporting components | 70 | Restricted administration and log ingestion only |
 
-## Network Challenge
+The optional Omada Controller remains a management-zone decision, not an automatic fifth workload or a reason to give an application VM access to VLAN 10. If hosted on the NucBox, decide its isolated placement and resource cost before deployment.
 
-The NucBox has one Ethernet port, but the project places services into different trust zones. The switch port connected to the NucBox should therefore be configured as a trunk.
+Attack Lab test VMs are separate, temporary lab resources and are not part of these four persistent NucBox VMs.
 
-## Recommended Advanced Approach
+## Supporting and optional services
 
-Use Linux VLAN subinterfaces and Docker networks.
+| Item from the broader plan | Status and placement |
+|---|---|
+| NGINX and `cloudflared` | Supporting services in the Public-projects VM |
+| Nextcloud database and cache | Supporting services inside the Nextcloud VM |
+| Wazuh manager, indexer, and dashboard | Supporting services inside the SOC VM |
+| Omada Controller | Optional; Management VLAN placement to be decided separately |
+| AdGuard DNS, Uptime Kuma, and CrowdSec/Fail2Ban-style controls | Possible later additions; choose a VM/zone, resource budget, and access policy before deployment |
+| Suricata/Zeek sensing | Later network-monitoring work; placement must follow a separate visibility and capacity design |
 
-Example VLAN-facing design:
+These possibilities do not add a fifth persistent NucBox VM to the current plan.
 
-| VLAN | Host Interface Concept | Service |
-|---|---|---|
-| VLAN 30 | `eth0.30` | Jellyfin Server, internal services, storage/backups |
-| VLAN 70 | `eth0.70` | Wazuh SIEM |
-| VLAN 80 | `eth0.80` | NGINX reverse proxy and Nextcloud Server |
-| VLAN 10 | `eth0.10`, optional | Omada Controller management path |
+## One-NIC network design
 
-Docker can then bind published services to the appropriate VLAN IPs, or use macvlan/ipvlan-style networking where appropriate.
+The NucBox's Ethernet link connects to an Omada switch trunk carrying VLANs 10, 30, 70, 80, and 81. A VLAN-aware virtual bridge presents each VM with only its assigned VLAN. Keep the host's management address on VLAN 10 and restrict it to approved admin devices or VPN clients. OPNsense is the gateway and default-deny firewall between VLANs; do not route between security zones on the hypervisor, switch, or Docker host.
 
-## Simpler Acceptable Approach
+VM isolation and separate VLANs reduce cross-service access, but the VMs still share one physical host. Traffic between containers in the **same VM** or devices in the **same VLAN** may never cross OPNsense. Avoid multi-homing the public VM into personal or management VLANs. Use narrowly scoped firewall rules for logging, monitoring, updates, and administration.
 
-Keep the NucBox host primarily in the Server VLAN, use separate Docker networks, bind exposed ports carefully, and enforce access with OPNsense and the host firewall. This is easier, but it should be documented as a tradeoff because Docker network separation on one host is not the same as fully separate physical servers.
+## Data and operations boundaries
 
-## Recommended Host Hardening
+- Keep each VM's Compose files, data, and credentials separate. Do not mount Nextcloud data into the public-projects VM.
+- Keep active application databases and Wazuh index data on appropriately sized local storage; use off-host storage for recoverable, application-consistent backups.
+- Back up VM configuration and app data separately. Test restoration of each workload and of the public tunnel path.
+- Restrict hypervisor, SSH, Docker, Wazuh, and application administration to approved management paths.
+- Send guest, web, application, and hypervisor events to the SOC VM through specific log-ingestion rules.
+- Confirm CPU/RAM/disk allocation, NIC and bridge behavior, VM startup order, and restore procedures on the actual hardware.
 
-- Use a minimal Linux server OS.
-- Restrict SSH to admin devices.
-- Use SSH keys and disable password-based SSH if practical.
-- Enable a host firewall.
-- Keep Docker and OS packages updated.
-- Store Docker Compose files in a private repository or backed-up folder.
-- Use separate Compose projects for NGINX, Nextcloud, Jellyfin, Wazuh, and Omada Controller.
-- Back up config files, databases, and media/cloud data.
-- Install the Wazuh agent on the NucBox host.
-- Monitor Docker logs and security-relevant directories.
+## Later host migration
 
-## Recommended Directory Structure on Host
-
-```text
-/srv/docker/
-├── nginx/
-├── nextcloud/
-├── jellyfin/
-├── wazuh/
-├── omada-controller/
-└── backups/
-```
-
-## Important Tradeoff
-
-Because Wazuh, Nextcloud, Jellyfin, and NGINX are on one physical host, compromise of the NucBox host could affect multiple services. This is acceptable for a home lab if documented clearly, but the future enterprise-style upgrade would be to split services across VMs or separate hosts.
+A second machine, such as a ThinkCentre, is a later option if measurements show insufficient capacity or independent maintenance/host-level separation becomes necessary. Keep the public VM portable so it can move to a separate host on VLAN 81. Preserve public hostnames while revalidating the tunnel destination, firewall policy, external site access, logs, and backups before retiring the old deployment.

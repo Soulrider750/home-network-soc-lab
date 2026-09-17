@@ -1,65 +1,37 @@
 # Wazuh SOC Monitoring Plan
 
-## Purpose
+## Purpose and placement
 
-Wazuh provides the SOC monitoring layer for this project. It should collect logs, generate alerts, support file integrity monitoring, and provide screenshots for the portfolio case study.
+Wazuh is planned in the NucBox SOC VM on VLAN 70. The manager, indexer, dashboard, and supporting components remain in that VM. Its dashboard is reachable only through approved management/VPN paths; monitored systems receive access only to required ingestion endpoints.
 
-## Placement
+Wazuh shares physical hardware with the services it monitors, so a NucBox outage affects both workloads and monitoring. Host-level logs and off-host backup evidence remain important.
 
-| Component | Zone |
+## Log sources
+
+| Source | Planned evidence |
 |---|---|
-| Wazuh Manager | VLAN 70 SOC |
-| Wazuh Indexer | VLAN 70 SOC |
-| Wazuh Dashboard | VLAN 70 SOC |
-| Wazuh Agent on NucBox | NucBox host |
-| Optional endpoint agents | Trusted devices, where practical |
-| Syslog inputs | OPNsense and network/service logs |
+| OPNsense | Inter-VLAN blocks, VPN connections, and firewall policy changes |
+| NucBox hypervisor | Host authentication, updates, VM lifecycle, and configuration changes |
+| Public-projects VM | NGINX requests/errors, KEV refresh status, portfolio origin, tunnel health, Linux auth, Docker events |
+| Nextcloud VM | Authentication, app errors, database/backup status, Linux auth, Docker events |
+| Media/internal-services VM | Jellyfin authentication/playback errors, Linux auth, Docker events |
+| SOC VM | Wazuh service health, storage, and administrator actions |
+| Temporary Attack Lab | Approved exercise activity and resulting alerts |
 
-## Log Sources
+Because the public tunnel is encrypted across the WAN, OPNsense cannot inspect individual HTTP requests inside it. Correlate NGINX, application, tunnel, and guest telemetry for public-site visibility.
 
-| Source | Events to Capture |
-|---|---|
-| OPNsense | Firewall blocks, WAN allows, inter-VLAN denied traffic |
-| NGINX | Access logs, error logs, suspicious requests, auth-heavy paths |
-| Nextcloud | Failed logins, admin events, application errors |
-| Jellyfin | Failed logins, remote sessions, application errors |
-| NucBox Linux host | SSH attempts, sudo usage, package changes, system logs |
-| Docker | Container starts/stops/restarts, service errors |
-| Wazuh FIM | Changes to key config directories |
-| Attack Lab | Test activity notes and generated alerts |
+## File integrity monitoring
 
-## File Integrity Monitoring Targets
+Set guest-specific targets for service configuration, deployment manifests, and sensitive system paths. Avoid recursive monitoring of large Nextcloud file stores, media libraries, or Wazuh index data unless capacity and noise are measured. Keep backup manifests and restores independently verifiable.
 
-| Path | Purpose |
-|---|---|
-| `/etc/` | System configuration changes |
-| `/srv/docker/nginx/` | Reverse proxy configuration |
-| `/srv/docker/nextcloud/` | Nextcloud Compose/config files |
-| `/srv/docker/jellyfin/` | Jellyfin Compose/config files |
-| `/srv/docker/wazuh/` | SIEM configuration |
-| Backup manifest/checksum files | Backup integrity evidence |
+## Validation evidence
 
-## Dashboards and Evidence
+- Failed SSH and application logins.
+- Public NGINX request and KEV refresh events.
+- Blocked VLAN 81-to-Nextcloud/Servers/Management paths.
+- Approved agent/syslog delivery from each VM and OPNsense.
+- File integrity changes to selected configuration files.
+- Docker lifecycle events and Wazuh service health.
+- Off-host backup and isolated restore of SOC configuration.
 
-Capture sanitized screenshots of:
-
-- Wazuh dashboard overview.
-- Failed SSH login alert.
-- File integrity alert.
-- Docker container event.
-- NGINX suspicious request event.
-- Nextcloud failed login event.
-- Jellyfin failed login event.
-- OPNsense blocked inter-VLAN traffic.
-
-## Suggested Alert Categories
-
-| Alert Category | Portfolio Value |
-|---|---|
-| Authentication failures | SOC analyst basics |
-| Port scanning | Reconnaissance detection |
-| Firewall blocks | Segmentation validation |
-| Public service login failures | Web service monitoring |
-| File changes | FIM and host monitoring |
-| Docker events | Container visibility |
-| Admin actions | Privilege/account monitoring |
+Confirm Wazuh CPU, RAM, disk, and retention requirements against the actual NucBox before setting guest resources.

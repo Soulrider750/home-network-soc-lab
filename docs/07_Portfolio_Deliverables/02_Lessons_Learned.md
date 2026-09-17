@@ -1,40 +1,21 @@
 # Lessons Learned
 
-Use this file as a running journal while building the project.
+Use this file as a running journal during implementation. The observations below are **planning decisions**, not tested outcomes.
 
-## What Worked Well
+## Planning decisions and tradeoffs
 
-- Separating devices by trust level made the firewall requirements easier to define.
-- Planning validation evidence before implementation created clearer success criteria.
-- 
-
-## What Was Difficult
-
-- The single-NIC NucBox required a documented balance between cost, complexity, and isolation.
-- Public Nextcloud and Jellyfin access required separating application access from management access.
-
-## Problems Encountered
-
-| Problem | Cause | Fix | Evidence |
-|---|---|---|---|
-|  |  |  |  |
-
-## Design Tradeoffs
-
-| Tradeoff | Decision | Reason |
+| Decision | Reason | Validation still needed |
 |---|---|---|
-| One physical NucBox host for multiple security zones | Accepted for lab | Cost and simplicity; documented as a limitation |
-| Docker instead of VMs | Accepted initially | Faster deployment; future Proxmox upgrade possible |
-| Public Jellyfin access | Allowed through NGINX only | Remote convenience with reduced exposure |
-| AdGuard DNS | Used for filtering/resolution | Authoritative DNS still managed elsewhere |
+| Four VMs on one NucBox | Separate public projects, personal data, internal media, and SOC workloads now | Confirm host capacity, virtual bridge isolation, and restore behavior |
+| Public-projects VLAN 81 | Put KEV and portfolio in a different routed zone from Nextcloud | Test blocked cross-zone paths |
+| Nextcloud and Jellyfin through VPN | Keep private files and video off the ordinary public-project tunnel | Test client access and performance |
+| Cloudflare Tunnel for public sites | Publish KEV and portfolio without inbound website port forwards | Verify tunnel target, public HTTPS, and logging |
+| Optional Omada Controller | Preserve a Management-zone deployment choice | Select placement and resource budget |
 
-## Future Improvements
+A NucBox outage affects every hosted VM. Wazuh also shares this failure domain. Off-host backups and restore tests are required before claiming recovery capability. Another host can be added later when capacity or maintenance needs justify it.
 
-- Add UPS.
-- Add NAS or external backup drive.
-- Add WireGuard VPN.
-- Add IDS/IPS after baseline stability.
-- Add Zeek/Suricata sensor with switch port mirroring.
-- Add Proxmox or separate hosts for stronger segmentation.
-- Add a formal asset inventory.
-- Add vulnerability scanning reports.
+## Implementation journal
+
+| Date | Problem or observation | Cause | Change | Evidence |
+|---|---|---|---|---|
+|  |  |  |  |  |
