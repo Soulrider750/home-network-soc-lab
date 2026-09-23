@@ -1,9 +1,9 @@
 # Segmented Home Network and SOC Monitoring Lab
 
-![Project status](https://img.shields.io/badge/status-core%20network%20operational%20%7C%20VLANs%20planned-2563eb)
+![Project status](https://img.shields.io/badge/status-core%20network%20operational%20%7C%20segmentation%20in%20progress-2563eb)
 ![Focus](https://img.shields.io/badge/focus-network%20security%20%7C%20SOC-0f172a)
 
-> **Current milestone:** Stage 3 — VLAN segmentation, Step 1 complete. The core network is operational; VLANs, the four-VM layout, and service migration remain planned.
+> **Current milestone:** Stage 3 — VLAN segmentation in progress. Management VLAN 10 access to the legacy switch and AP is confirmed. The remaining VLAN migration and isolation tests are incomplete; the four-VM layout and service migration remain planned.
 
 ## Project summary
 
@@ -63,11 +63,15 @@ All four VMs share the NucBox's physical failure risk. Keep each VM's data, depl
 
 ## Implementation Status
 
-**Updated:** September 22, 2026
+**Updated:** September 23, 2026
 
-**Current milestone:** Stage 3 — VLAN segmentation, Step 1 complete
+**Current milestone:** Stage 3 — Management VLAN 10 access to legacy infrastructure confirmed
 
 The core network is operational, and household devices are connected through the Omada AP. OPNsense preparation, the core network cutover, and pre-VLAN preparation are complete.
+
+During Step 9 validation on September 23, Parrot at `10.10.10.110` could not open the legacy switch and AP management pages. Correcting the firewall rule destination to `LEGACY_INFRA` and enabling the AP's Layer-3 Accessibility restored access. The owner confirmed access to both devices from Management VLAN 10 and the legacy network. Troubleshooting took approximately 10 minutes, with no impact on household connectivity. The switch remains at `10.255.250.153`; the AP remains at `10.255.250.181`.
+
+The [management-access troubleshooting record](docs/06_Hardening_Backup_and_Operations/incidents/2026-09-23-mgmt-to-legacy-management-access.md) includes nine screenshots, the corrective changes, reported validation results, and follow-up items. These results confirm management access at this checkpoint; broader segmentation and isolation validation remain incomplete.
 
 Pre-VLAN internet performance was measured using [Measurement Lab](https://www.measurementlab.net/) on September 22, 2026:
 
@@ -82,7 +86,7 @@ The initial OPNsense configuration backup was successfully restored. Separate en
 
 Installed versions are OPNsense `26.7.4-1`, switch firmware `3.0.29`, and AP firmware `1.2.4`. Omada currently operates in standalone mode; Controller migration is planned.
 
-VLAN segmentation, firewall isolation, new SSIDs, application hosting, and SOC monitoring remain planned. The replacement wireless networks will use new SSIDs, with the current household SSID retained temporarily during testing and migration.
+VLAN segmentation is in progress. Remaining VLAN and device migration, firewall isolation testing, new SSIDs, application hosting, and SOC monitoring are not yet documented as complete. The replacement wireless networks will use new SSIDs, with the current household SSID retained temporarily during testing and migration.
 
 Architecture diagrams and configuration plans describe the intended design unless explicitly labeled as implemented and validated.
 
@@ -141,6 +145,7 @@ See the [implementation progress report](docs/00_Project_Overview/03_Implementat
 - [Wazuh SOC Monitoring Plan](docs/04_SOC_and_Monitoring/01_Wazuh_SOC_Monitoring_Plan.md)
 - [Attack Lab Plan](docs/05_Attack_Lab_and_Detections/01_Attack_Lab_Plan.md)
 - [Hardening, Backup, and Operations](docs/06_Hardening_Backup_and_Operations/01_Hardening_Backup_and_Operations.md)
+- [Management VLAN Access Troubleshooting — September 23, 2026](docs/06_Hardening_Backup_and_Operations/incidents/2026-09-23-mgmt-to-legacy-management-access.md)
 - [Planning Milestone](docs/07_Portfolio_Deliverables/01_Portfolio_Case_Study_Planning_Milestone.md)
 - [Lessons Learned](docs/07_Portfolio_Deliverables/02_Lessons_Learned.md)
 - [Sources and Documentation Links](docs/08_References/Sources_and_Documentation_Links.md)
