@@ -1,9 +1,9 @@
 # Segmented Home Network and SOC Monitoring Lab
 
-![Project status](https://img.shields.io/badge/status-revised%20plan%20%7C%20deployment%20pending-2563eb)
+![Project status](https://img.shields.io/badge/status-core%20network%20operational%20%7C%20VLANs%20planned-2563eb)
 ![Focus](https://img.shields.io/badge/focus-network%20security%20%7C%20SOC-0f172a)
 
-> **Current milestone:** The four-VM NucBox architecture is documented. The new VLAN, VM layout, access paths, and service migration still need implementation and validation.
+> **Current milestone:** Stage 3 — VLAN segmentation, Step 1 complete. The core network is operational; VLANs, the four-VM layout, and service migration remain planned.
 
 ## Project summary
 
@@ -61,6 +61,33 @@ Wazuh is planned to ingest OPNsense events, hypervisor and guest activity, NGINX
 
 All four VMs share the NucBox's physical failure risk. Keep each VM's data, deployment files, and credentials separate; make application-consistent off-host backups and test restores. Measure CPU, RAM, disk, Wazuh retention, and Jellyfin transcoding before assigning resources or deciding whether a second host is needed. A later ThinkCentre could host the public-projects VM while retaining its VLAN 81 policy and public hostnames after a verified cutover.
 
+## Implementation Status
+
+**Updated:** September 22, 2026
+
+**Current milestone:** Stage 3 — VLAN segmentation, Step 1 complete
+
+The core network is operational, and household devices are connected through the Omada AP. OPNsense preparation, the core network cutover, and pre-VLAN preparation are complete.
+
+Pre-VLAN internet performance was measured using [Measurement Lab](https://www.measurementlab.net/) on September 22, 2026:
+
+| Connection | Download | Upload | Latency |
+|---|---:|---:|---:|
+| Wired | 898.45 Mbps | 39.51 Mbps | 14 ms |
+| Wireless | 758.75 Mbps | 39.34 Mbps | 15 ms |
+
+The wireless test used the 5 GHz band at approximately 5 feet from the AP.
+
+The initial OPNsense configuration backup was successfully restored. Separate encrypted pre-VLAN backups for OPNsense, the switch, and the AP are stored on the Parrot OS administration device and an external 2 TB Seagate drive. Direct recovery access has been tested through switch port 7 and Protectli physical port 3.
+
+Installed versions are OPNsense `26.7.4-1`, switch firmware `3.0.29`, and AP firmware `1.2.4`. Omada currently operates in standalone mode; Controller migration is planned.
+
+VLAN segmentation, firewall isolation, new SSIDs, application hosting, and SOC monitoring remain planned. The replacement wireless networks will use new SSIDs, with the current household SSID retained temporarily during testing and migration.
+
+Architecture diagrams and configuration plans describe the intended design unless explicitly labeled as implemented and validated.
+
+See the [implementation progress report](docs/00_Project_Overview/03_Implementation_Progress_2026-09-22.md) for backup, recovery-port, and validation details.
+
 ## Status and validation roadmap
 
 ### Documented target design
@@ -88,6 +115,7 @@ All four VMs share the NucBox's physical failure risk. Keep each VM's data, depl
 
 - [Project Summary](docs/00_Project_Overview/01_Project_Summary.md)
 - [Build Phases](docs/00_Project_Overview/02_Build_Phases.md)
+- [Implementation Progress — September 22, 2026](docs/00_Project_Overview/03_Implementation_Progress_2026-09-22.md)
 
 ### Network design
 
