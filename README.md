@@ -1,15 +1,15 @@
 # Segmented Home Network and SOC Monitoring Lab
 
-![Project status](https://img.shields.io/badge/status-core%20network%20operational%20%7C%20segmentation%20in%20progress-2563eb)
+![Project status](https://img.shields.io/badge/status-Stage%203%20complete%20%7C%20owner%20validated-2563eb)
 ![Focus](https://img.shields.io/badge/focus-network%20security%20%7C%20SOC-0f172a)
 
-> **Current milestone:** Stage 3 — VLAN segmentation in progress. Management VLAN 10 access to the legacy switch and AP is confirmed. The remaining VLAN migration and isolation tests are incomplete; the four-VM layout and service migration remain planned.
+> **Current milestone:** Stage 3 — VLAN segmentation and new SSIDs complete, as confirmed by the project owner on September 23, 2026. All stage tests passed and configuration backups were created. The updated evidence package contains 31 sanitized screenshots supporting selected configuration, management-access, and firewall-block results; the four-VM deployment and service migration remain planned.
 
 ## Project summary
 
 ![Planned four-VM NucBox topology](assets/diagrams/logical_topology_final.png)
 
-This project plans a segmented home network, public cybersecurity portfolio services, private home services, and a SOC monitoring lab. OPNsense will route and filter traffic between VLANs; the Omada switch and access point will carry the wired and wireless zones. The NucBox will use a VLAN-aware hypervisor and four persistent VMs.
+This project implements a segmented home network and plans public cybersecurity portfolio services, private home services, and a SOC monitoring lab. OPNsense routes and filters traffic between VLANs; the Omada switch and access point carry the wired and wireless zones. The NucBox is planned to use a VLAN-aware hypervisor and four persistent VMs.
 
 | NucBox VM | Planned workloads | VLAN | Access |
 |---|---|---:|---|
@@ -65,13 +65,15 @@ All four VMs share the NucBox's physical failure risk. Keep each VM's data, depl
 
 **Updated:** September 23, 2026
 
-**Current milestone:** Stage 3 — Management VLAN 10 access to legacy infrastructure confirmed
+**Current milestone:** Stage 3 — VLAN segmentation and new SSIDs complete
 
-The core network is operational, and household devices are connected through the Omada AP. OPNsense preparation, the core network cutover, and pre-VLAN preparation are complete.
+The project owner confirmed Stage 3 completion, successful completion of all stage tests, and creation of configuration backups on September 23. Parrot OS currently has access to the management infrastructure. The fresh cleanup captures show authenticated management pages at `10.10.10.1` (OPNsense), `10.10.10.2` (switch), and `10.10.10.3` (AP). The current Parrot client address is not shown.
 
-During Step 9 validation on September 23, Parrot at `10.10.10.110` could not open the legacy switch and AP management pages. Correcting the firewall rule destination to `LEGACY_INFRA` and enabling the AP's Layer-3 Accessibility restored access. The owner confirmed access to both devices from Management VLAN 10 and the legacy network. Troubleshooting took approximately 10 minutes, with no impact on household connectivity. The switch remains at `10.255.250.153`; the AP remains at `10.255.250.181`.
+During the earlier Step 9 validation, Parrot at `10.10.10.110` could not open the legacy switch and AP management pages. Correcting the firewall rule destination to `LEGACY_INFRA` and enabling the AP's Layer-3 Accessibility restored access. The owner confirmed approximately 10 minutes of troubleshooting with no household connectivity impact. Addresses in that incident describe the intermediate migration state, not an inventory of final management addresses.
 
-The [management-access troubleshooting record](docs/06_Hardening_Backup_and_Operations/incidents/2026-09-23-mgmt-to-legacy-management-access.md) includes nine screenshots, the corrective changes, reported validation results, and follow-up items. These results confirm management access at this checkpoint; broader segmentation and isolation validation remain incomplete.
+The [management-access troubleshooting record](docs/06_Hardening_Backup_and_Operations/incidents/2026-09-23-mgmt-to-legacy-management-access.md) preserves the earlier failure and recovery. The [Stage 3 completion record](docs/00_Project_Overview/04_Stage_3_Completion_2026-09-23.md) records the owner-reported milestone, the new Parrot configuration evidence, and selected earlier process results. All screenshot assets in this review copy have been sanitized, including the nine historical incident images; actual wireless names are represented by functional roles. Later logs directly show blocked firewall-access attempts from Trusted, Media, and Guest. They do not individually demonstrate every inter-VLAN or guest peer-isolation test.
+
+The owner subsequently reported legacy cleanup. The fresh captures confirm removal of both temporary legacy permits and the temporary MGMT firewall-HTTPS permit, show only `10.10.20.110` in the `ADMIN_HOSTS` edit form, and show Guest Network enabled on both Guest bands. The alias form does not establish save/persistence. The Lab entry now shows VLAN ID **Disable**, which does not establish that the WLAN is off; this needs clarification before Lab use. Switch membership/PVID details remain unchanged. Post-cleanup testing and refreshed backups were not separately confirmed. The [revised completion record](docs/00_Project_Overview/04_Stage_3_Completion_2026-09-23.md) distinguishes resolved observations from remaining follow-up.
 
 Pre-VLAN internet performance was measured using [Measurement Lab](https://www.measurementlab.net/) on September 22, 2026:
 
@@ -82,15 +84,17 @@ Pre-VLAN internet performance was measured using [Measurement Lab](https://www.m
 
 The wireless test used the 5 GHz band at approximately 5 feet from the AP.
 
-The initial OPNsense configuration backup was successfully restored. Separate encrypted pre-VLAN backups for OPNsense, the switch, and the AP are stored on the Parrot OS administration device and an external 2 TB Seagate drive. Direct recovery access has been tested through switch port 7 and Protectli physical port 3.
+The initial OPNsense configuration backup was successfully restored. Separate encrypted pre-VLAN backups were recorded on Parrot OS and an external 2 TB Seagate drive. New configuration backups were confirmed after Stage 3; their individual filenames, locations, and a separate restoration test were not supplied in this completion update. Earlier direct recovery access was tested through switch port 7 and Protectli physical port 3.
 
-Installed versions are OPNsense `26.7.4-1`, switch firmware `3.0.29`, and AP firmware `1.2.4`. Omada currently operates in standalone mode; Controller migration is planned.
+Versions recorded on September 22 were OPNsense `26.7.4-1`, switch firmware `3.0.29`, and AP firmware `1.2.4`. The supplied Omada captures use standalone management; Controller migration remains planned.
 
-VLAN segmentation is in progress. Remaining VLAN and device migration, firewall isolation testing, new SSIDs, application hosting, and SOC monitoring are not yet documented as complete. The replacement wireless networks will use new SSIDs, with the current household SSID retained temporarily during testing and migration.
+The September 23 completion set includes an internet speed result of **868 Mbps download and 35 Mbps upload**. Its client, VLAN, connection medium, and test conditions are not shown, so it is not a controlled comparison with the earlier wired or wireless baselines.
+
+The next implementation stage is **Stage 4 — NucBox hypervisor and VMs**. Application hosting, Omada Controller adoption, and SOC monitoring are still planned. The build-phase document calls the hypervisor work Phase 3; the implementation-stage numbering includes earlier preparation and cutover as separate stages.
 
 Architecture diagrams and configuration plans describe the intended design unless explicitly labeled as implemented and validated.
 
-See the [implementation progress report](docs/00_Project_Overview/03_Implementation_Progress_2026-09-22.md) for backup, recovery-port, and validation details.
+See the [September 22 progress report](docs/00_Project_Overview/03_Implementation_Progress_2026-09-22.md) for the historical pre-VLAN baseline and the [September 23 completion record](docs/00_Project_Overview/04_Stage_3_Completion_2026-09-23.md) for the current milestone.
 
 ## Status and validation roadmap
 
@@ -104,7 +108,7 @@ See the [implementation progress report](docs/00_Project_Overview/03_Implementat
 ### Still to implement and verify
 
 - [ ] Record the exact NucBox SKU; verify the i9-13900HK, 32 GB DDR5 RAM, 1 TB SSD, virtualization support, usable storage, and capacity for four VMs plus the Omada management container
-- [ ] Configure OPNsense and Omada VLAN 81; adopt switch/AP into the Omada Controller and test VLANs and default-deny routing
+- [ ] Adopt switch/AP into the Omada Controller during a separate change and repeat trunk, SSID, DHCP, management, and isolation tests
 - [ ] Install hypervisor with management on VLAN 10 and VLAN-aware bridge
 - [ ] Create and harden the four VMs in stages
 - [ ] Deploy and test Nextcloud, Jellyfin, Wazuh, and portfolio workloads
@@ -120,6 +124,7 @@ See the [implementation progress report](docs/00_Project_Overview/03_Implementat
 - [Project Summary](docs/00_Project_Overview/01_Project_Summary.md)
 - [Build Phases](docs/00_Project_Overview/02_Build_Phases.md)
 - [Implementation Progress — September 22, 2026](docs/00_Project_Overview/03_Implementation_Progress_2026-09-22.md)
+- [Stage 3 Completion — September 23, 2026](docs/00_Project_Overview/04_Stage_3_Completion_2026-09-23.md)
 
 ### Network design
 
