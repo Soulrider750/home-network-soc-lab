@@ -1,0 +1,1420 @@
+{
+  "review_date": "2026-09-23",
+  "coordinate_system": "Original image pixels, origin upper left; x2/y2 exclusive.",
+  "retained": "Private technical addresses, VLANs, aliases, model names, rule actions and logs.",
+  "image_count": 31,
+  "masked_images": 25,
+  "images": [
+    {
+      "id": "P01",
+      "source_filename": "Screenshot_20260923_230119.png",
+      "output": "assets/screenshots/stage3/2026-09-23/01-trusted-rules.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "76c54ca4e37d34fa78ea1585b60a37e16b18c05ef76c7a58ccb82b81d5510951",
+      "output_sha256": "8b40635d85c7f1d676d94f4bb9699bcb16b7ad300469a67b3facc6e14e0fdaae",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1385,
+            174,
+            1580,
+            213
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "P02",
+      "source_filename": "Screenshot_20260923_230201.png",
+      "output": "assets/screenshots/stage3/2026-09-23/02-mgmt-rules.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "de5306bda2a31670e8ee064ab5197d32887d2dc41918c3ea26bb08921ce7391b",
+      "output_sha256": "ff9640f6ba1a25901ecd32a1bf4b3cb1dbab77ba7d7af2219d6c5495665eedb6",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1385,
+            174,
+            1580,
+            213
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "P03",
+      "source_filename": "Screenshot_20260923_230240.png",
+      "output": "assets/screenshots/stage3/2026-09-23/03-admin-hosts.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "660f3161ec5d89e8ef8c037e6d3a64e18daa9e296344af1a1c2f5ef1fd06950e",
+      "output_sha256": "4fbd3b01e85b4e3d79ee52eb9cc34b481913545c950b80e2bfd86760d0d06fc8",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1385,
+            174,
+            1580,
+            213
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "P04",
+      "source_filename": "Screenshot_20260923_230302.png",
+      "output": "assets/screenshots/stage3/2026-09-23/04-mgmt-infra.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "4bc3249d9de4f3b11679c2c05f76cba78f3cf06c6744ed41f37e1f4bc1c53385",
+      "output_sha256": "9d7ffcc70bef5c4b46d4397fcee46e17ffc81eecbc9a02b38bb7c65135937da1",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1385,
+            174,
+            1580,
+            213
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "P05",
+      "source_filename": "Screenshot_20260923_230521.png",
+      "output": "assets/screenshots/stage3/2026-09-23/05-switch-vlans-upper.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "15ce1d0e74c5f4223516f5a63f7e61b9d3f8123b94eac01d85df2e718f814f0d",
+      "output_sha256": "bdb16e6c8735fb5a510d21afe67930a9c495e4982874a3f5c538f8947e3a9b7a",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "P06",
+      "source_filename": "Screenshot_20260923_230531.png",
+      "output": "assets/screenshots/stage3/2026-09-23/06-switch-vlans-lower.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "c39a2c64eb6c730ff9edcb4a24cf5f4f2d84ad878aa0faf0a96b47b950738b3f",
+      "output_sha256": "ea8b89d7ff80eda01cf43cb995c25a41cda22687056effb434680cae11adfb09",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "P07",
+      "source_filename": "Screenshot_20260923_230551.png",
+      "output": "assets/screenshots/stage3/2026-09-23/07-switch-pvids.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "da03137c37c05ac38a14cb91fd4a92d51cd1116f029482825e6dac366222b044",
+      "output_sha256": "4e129aa0402afd48358e104a934a0b785c989a7ea436cb629683be5cef1f4a9b",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "P08",
+      "source_filename": "Screenshot_20260923_230632.png",
+      "output": "assets/screenshots/stage3/2026-09-23/08-ap-24ghz.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "60786364aa0ab3cb6f44338ad032f7095fa1051b55c3c0b57ad610b6f7872769",
+      "output_sha256": "37c7a7c9f18464f4f1f3b7eddc44a6a418b2bf57f5aab722541d284056abfad9",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            585,
+            736,
+            722,
+            766
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            585,
+            787,
+            722,
+            817
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            585,
+            838,
+            722,
+            868
+          ],
+          "reason": "Actual wireless network name"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "P09",
+      "source_filename": "Screenshot_20260923_230643.png",
+      "output": "assets/screenshots/stage3/2026-09-23/09-ap-5ghz.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "d11a13beb45b4eba285a99df649db6ce00276537cd81dc22d1568f333818b9d4",
+      "output_sha256": "9c7a68951cbc0cfee84291edfbad65b67397993e644febc0fc282f3a96d0798a",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            585,
+            736,
+            722,
+            766
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            585,
+            787,
+            722,
+            817
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            585,
+            838,
+            722,
+            868
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            585,
+            889,
+            722,
+            919
+          ],
+          "reason": "Actual wireless network name"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "P10",
+      "source_filename": "Screenshot_20260923_230709.png",
+      "output": "assets/screenshots/stage3/2026-09-23/10-ap-vlan-mappings.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "46ce5baf1ec684339e48d0f5c00bed0ea49f42664bcb8931a09851ac731a6fb3",
+      "output_sha256": "363f3a45aa4390cbf9121d99ebfdd4f05f08723b2dfbbd7f213a976c0246ba1d",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            592,
+            477,
+            750,
+            511
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            592,
+            528,
+            750,
+            562
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            592,
+            579,
+            750,
+            613
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            592,
+            630,
+            750,
+            664
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            592,
+            681,
+            750,
+            715
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            592,
+            733,
+            750,
+            767
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            592,
+            784,
+            750,
+            818
+          ],
+          "reason": "Actual wireless network name"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "S12",
+      "source_filename": "Screenshot 2026-09-23 at 15.21.41.png",
+      "output": "assets/screenshots/stage3/2026-09-23/11-trusted-denial.png",
+      "dimensions": [
+        1712,
+        981
+      ],
+      "source_sha256": "997161ea1338f2d47018fc7c5e984f489e0b97437c42a0b3e66af09431be99c2",
+      "output_sha256": "f998a97c0d117fde3fdd92a66b5975b835c329783d09706fce18f851ede07438",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            1170,
+            12,
+            1390,
+            51
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "S13",
+      "source_filename": "Screenshot 2026-09-23 at 15.34.59.png",
+      "output": "assets/screenshots/stage3/2026-09-23/12-media-denial.png",
+      "dimensions": [
+        1711,
+        983
+      ],
+      "source_sha256": "0df39b2aebe95b97fa0db171c3065db425a728d596b2fb613351df2c2977036e",
+      "output_sha256": "2f0feb8ad47f730ff24d65a029e91f60f8f4beaa5202bda6196a2c6b6bdaf462",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            1170,
+            12,
+            1390,
+            51
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "S14",
+      "source_filename": "Screenshot 2026-09-23 at 15.48.38.png",
+      "output": "assets/screenshots/stage3/2026-09-23/13-guest-denial.png",
+      "dimensions": [
+        1711,
+        981
+      ],
+      "source_sha256": "5da673ab8f291afab7e0f3bf1e7745e6f9d177e62a836456f44394be601bdb8b",
+      "output_sha256": "7d5e648f48a75bb326629543bef5b24cee5072ea613b49ac1f354532aac7cfa8",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            1170,
+            12,
+            1390,
+            51
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "S15",
+      "source_filename": "Screenshot 2026-09-23 at 16.33.55.png",
+      "output": "assets/screenshots/stage3/2026-09-23/14-speed-result.png",
+      "dimensions": [
+        1368,
+        1282
+      ],
+      "source_sha256": "ee480eef8ccfe260f869f0da1a83c519ba868a441d060b1f1e78d6f6db2c0d1c",
+      "output_sha256": "f0e62b6c9c6e54e97a5dfe77e2fa9b684b11a76cd29e46d7888162e0d3ee3039",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            210,
+            719,
+            435,
+            760
+          ],
+          "reason": "Public WAN IPv4 address"
+        },
+        {
+          "box_xyxy_exclusive": [
+            209,
+            807,
+            392,
+            845
+          ],
+          "reason": "Test server location"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "E01",
+      "source_filename": "01-opnsense-https-blocks.png",
+      "output": "assets/screenshots/troubleshooting/2026-09-23-mgmt-access/01-opnsense-https-blocks.png",
+      "dimensions": [
+        3418,
+        1978
+      ],
+      "source_sha256": "1969a86cd762142ec43a3896e4f5bb84fd32d38d8f582800cd23da83d0153eba",
+      "output_sha256": "70b761b61972985111a1e838f26ac66e4081312c71cc31399177cbdfafc67b72",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            2355,
+            22,
+            2725,
+            105
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "E02",
+      "source_filename": "02-opnsense-https-pass-http-blocks.png",
+      "output": "assets/screenshots/troubleshooting/2026-09-23-mgmt-access/02-opnsense-https-pass-http-blocks.png",
+      "dimensions": [
+        3420,
+        1936
+      ],
+      "source_sha256": "15a397ec35667110d2f3c866bc1679eed0190963351835e269328d2ae041694a",
+      "output_sha256": "557a2c30d53e4f9cdd53dcd014311f105c12df68f07578ecc60292c8c832bba6",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            2355,
+            22,
+            2725,
+            105
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "E03",
+      "source_filename": "03-omada-layer3-access.png",
+      "output": "assets/screenshots/troubleshooting/2026-09-23-mgmt-access/03-omada-layer3-access.png",
+      "dimensions": [
+        3414,
+        1962
+      ],
+      "source_sha256": "c353107079a3e8b8d18d7fdd61567107c5de00acd8afd04f5ce8b498dc6a0f52",
+      "output_sha256": "2b9d0967c31a7d963bb5e1b179dce066ce613a5baefdbffc17c50c5314d64bef",
+      "masks": [],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "E04",
+      "source_filename": "04-opnsense-corrected-rule.png",
+      "output": "assets/screenshots/troubleshooting/2026-09-23-mgmt-access/04-opnsense-corrected-rule.png",
+      "dimensions": [
+        1896,
+        1752
+      ],
+      "source_sha256": "ec54155e4f8ce14ef476085a5ba01aad15cb300c99c870d5de632b6e11a04e88",
+      "output_sha256": "906868aa04829cb80cee23cd44cd11aaf5dbbd0cdca8e4ca2ef018a2c516daa1",
+      "masks": [],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "E05",
+      "source_filename": "05-opnsense-mgmt-rule-order.png",
+      "output": "assets/screenshots/troubleshooting/2026-09-23-mgmt-access/05-opnsense-mgmt-rule-order.png",
+      "dimensions": [
+        1712,
+        984
+      ],
+      "source_sha256": "1808e97200c4a8a93e4dfd84399ad5e1f69a703ecfc77c36bd383cd85c03141d",
+      "output_sha256": "0a756a83e3419c16aeca572eb21a70d765d3c6f154995f668b971d5c6c096214",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            1170,
+            12,
+            1390,
+            51
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "E06",
+      "source_filename": "06-admin-hosts-alias.png",
+      "output": "assets/screenshots/troubleshooting/2026-09-23-mgmt-access/06-admin-hosts-alias.png",
+      "dimensions": [
+        2420,
+        1582
+      ],
+      "source_sha256": "fcc218e165ddc0bfa7e643a994108a534d5cdf4993eb429680c5285487810f61",
+      "output_sha256": "503b972351aa87e1b64ae5867c9be55bdaa476b8d5669afd9793f38de8a2daa1",
+      "masks": [],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "E07",
+      "source_filename": "07-legacy-infra-alias.png",
+      "output": "assets/screenshots/troubleshooting/2026-09-23-mgmt-access/07-legacy-infra-alias.png",
+      "dimensions": [
+        2438,
+        1558
+      ],
+      "source_sha256": "a329a738fafcc3c21234155a8df455e8c89e05c4f3925b7fd656ca88273f4020",
+      "output_sha256": "716e8315770082876ec6ff37d1987743cececef2b37b151a3745e2fea3b5c37b",
+      "masks": [],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "E08",
+      "source_filename": "08-admin-ports-alias.png",
+      "output": "assets/screenshots/troubleshooting/2026-09-23-mgmt-access/08-admin-ports-alias.png",
+      "dimensions": [
+        2432,
+        1062
+      ],
+      "source_sha256": "26013ace88a95ff86fdfd71312418056549712f1525657a7350935974b23c771",
+      "output_sha256": "7903e1a65e27e0f6379814cac20a77e7fd73a5086bf333152524ee505d5f22b9",
+      "masks": [],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "E09",
+      "source_filename": "09-opnsense-rule-upper-fields.png",
+      "output": "assets/screenshots/troubleshooting/2026-09-23-mgmt-access/09-opnsense-rule-upper-fields.png",
+      "dimensions": [
+        1844,
+        1712
+      ],
+      "source_sha256": "4c9f127c1e7e1fdbc73cb87a433cf2f5e4345e03980977db3eefce0cb96a506d",
+      "output_sha256": "baf9867a8936b8d00ff87804006da7a1f41a937c2023df697370756836555b06",
+      "masks": [],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "C01",
+      "source_filename": "Screenshot_20260923_234302.png",
+      "output": "assets/screenshots/stage3/2026-09-23/cleanup/01-trusted-rules.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "ea684b34b01d169662e9e9c2c3af54ce822194abbf17b9efe441039d7778954f",
+      "output_sha256": "b5cbca36d5d4e6271a3ece2c06c8211fec9a9356af3fd801f0941baf5c190223",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1385,
+            174,
+            1580,
+            213
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "C02",
+      "source_filename": "Screenshot_20260923_234335.png",
+      "output": "assets/screenshots/stage3/2026-09-23/cleanup/02-mgmt-rules.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "cb4b8c38fd1dc6669a79451dbef9ba6708bebeecc67073cfd16e43220967585a",
+      "output_sha256": "0b12d2095e7ede203391434cdd8ebc4cb391a3b45b5915a9231fe5755943577a",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1385,
+            174,
+            1580,
+            213
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "C03",
+      "source_filename": "Screenshot_20260923_234400.png",
+      "output": "assets/screenshots/stage3/2026-09-23/cleanup/03-admin-hosts.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "ef2e222338b928e64b4a8e47d1fe15d5cb1b6c4d53923b7dac3ff29efb635acd",
+      "output_sha256": "f62b211abbb9a8c9c77e93064f62df2b4fe9a4d643f977aeb80a83026290d043",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1385,
+            174,
+            1580,
+            213
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "C04",
+      "source_filename": "Screenshot_20260923_234420.png",
+      "output": "assets/screenshots/stage3/2026-09-23/cleanup/04-mgmt-infra.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "c1fe6a927280ab2107b6c510778596da8e7f2e29ca7258028379f199ae1d7d42",
+      "output_sha256": "1c0af50f57a3d4b1f5e4e204b6e858188d7c4a9d6c9daca35f42b4e779ec5663",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1385,
+            174,
+            1580,
+            213
+          ],
+          "reason": "Administrator account and internal hostname"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "C05",
+      "source_filename": "Screenshot_20260923_234511.png",
+      "output": "assets/screenshots/stage3/2026-09-23/cleanup/05-switch-vlans-upper.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "17a76f929401f4098d15d6052d448b9495b5c467016462a5c35eb998bfe3405b",
+      "output_sha256": "00443f1279065544582d75ec5fa9843958d764720d37a0cfd61ee32bb349b4f6",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "C06",
+      "source_filename": "Screenshot_20260923_234523.png",
+      "output": "assets/screenshots/stage3/2026-09-23/cleanup/06-switch-vlans-lower.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "26172d2d71dfc1c894ab5cc92c6a80e1124acb93b232b8308865e6383b23dfe4",
+      "output_sha256": "a84836f7796129ede3e5aacba5c0530dfa7ffbe3d8a190d6e2a11017e234f14e",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "C07",
+      "source_filename": "Screenshot_20260923_234534.png",
+      "output": "assets/screenshots/stage3/2026-09-23/cleanup/07-switch-pvids.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "183b0cc228c33a93c50ddbf6175233900de2411496d40368f7c636671cbe56a0",
+      "output_sha256": "ce9019db7445c13ba8db48fe98543f1243ac2eaf48be6a247092661f35ce3176",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    },
+    {
+      "id": "C08",
+      "source_filename": "Screenshot_20260923_234633.png",
+      "output": "assets/screenshots/stage3/2026-09-23/cleanup/08-ap-wireless-status.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_sha256": "a02af90e533969ddd816ac95121012c9a8ba996641cf4922618775aae72ef765",
+      "output_sha256": "2f082d8c1f7d57032436717c973ab29d8dda888760a8dd7df0feb273112a32e9",
+      "masks": [
+        {
+          "box_xyxy_exclusive": [
+            0,
+            0,
+            1920,
+            89
+          ],
+          "reason": "Unrelated desktop panel and browser tabs"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            89,
+            214,
+            126
+          ],
+          "reason": "Browser controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            1535,
+            89,
+            1920,
+            126
+          ],
+          "reason": "Browser profile and extension controls"
+        },
+        {
+          "box_xyxy_exclusive": [
+            0,
+            126,
+            1920,
+            160
+          ],
+          "reason": "Personal browser bookmarks"
+        },
+        {
+          "box_xyxy_exclusive": [
+            550,
+            503,
+            665,
+            533
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            550,
+            554,
+            665,
+            584
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            550,
+            605,
+            665,
+            635
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            550,
+            657,
+            665,
+            687
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            550,
+            708,
+            665,
+            738
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            550,
+            759,
+            665,
+            789
+          ],
+          "reason": "Actual wireless network name"
+        },
+        {
+          "box_xyxy_exclusive": [
+            550,
+            810,
+            665,
+            840
+          ],
+          "reason": "Actual wireless network name"
+        }
+      ],
+      "verification": "Original dimensions retained; every RGBA pixel outside masks identical; masks opaque; embedded metadata removed."
+    }
+  ],
+  "revision": 2,
+  "revision_verification": "Eight fresh cleanup images compared to their originals outside masks. The 23 earlier sanitized derivatives match their previously verified output hashes; their original pixel verification is retained from revision 1."
+}

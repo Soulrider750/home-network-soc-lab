@@ -9,7 +9,7 @@
 | Implementation checkpoint | Stage 3, Step 9: Management VLAN validation |
 | Category | Network configuration and management access |
 | Operational status | Resolved — access confirmed by the project owner |
-| Documentation status | Nine screenshots reviewed and attached; switch address confirmed by the project owner |
+| Documentation status | Nine reviewed redacted screenshot derivatives attached; switch address confirmed by the project owner |
 
 ## Summary
 
@@ -37,7 +37,7 @@ OPNsense routes traffic between Management VLAN 10 and the existing legacy netwo
 
 The observed failure was management-page access from Parrot on VLAN 10. The owner reported that every other Step 9 check passed, which covers expected addressing, DNS, internet access, and access to the OPNsense management page. The owner subsequently confirmed approximately 10 minutes of troubleshooting and no interruption to household connectivity.
 
-The owner confirmed that the switch remains at `10.255.250.153`; the earlier address discrepancy is resolved.
+At this incident checkpoint, the owner confirmed the switch address as `10.255.250.153`; the incident-time discrepancy was resolved. Later Management addresses are recorded under the Stage 3 follow-up below.
 
 ## Troubleshooting sequence and recorded times
 
@@ -107,7 +107,7 @@ E05 shows these interface rules in the MGMT view, in this order. Automatically g
 
 The legacy permit at position 2 is above the internal-network block at position 5. A similar TCP-only permit remains at position 7 with the same description: **“TEMP - Allow Parrot to legacy switch and AP admin ports.”** The upper TCP/UDP rule already covers the intended TCP traffic. The lower copy is therefore redundant for that traffic; a connection denied by an earlier matching quick block cannot be rescued by this later permit.
 
-This additional rule-order finding is a follow-up observation from E05, not a replacement for the owner's identified destination error. Removing the redundant lower rule and reviewing whether the upper permit needs UDP are cleanup recommendations; those changes have not been performed or included in the reported resolution.
+This additional rule-order finding is a follow-up observation from E05, separate from the owner's identified destination error. At incident close, removing the redundant lower rule and reviewing whether the upper permit needed UDP were cleanup recommendations that had not yet been performed or included in the reported resolution. The later cleanup capture C02 shows both temporary legacy permits removed, as recorded in the later Stage 3 context below.
 
 OPNsense normally evaluates quick rules on a first-match basis and applies inbound policy on the interface where traffic originates. The source interface and destination network are separate rule fields. [OPNsense firewall documentation](https://docs.opnsense.org/manual/firewall.html)
 
@@ -156,9 +156,13 @@ In the same capture, the red **MGMT / In / block** rows target port **80**, not 
 
 These recovery results are confirmed by the project owner. E01/E02 independently support the failed HTTPS requests and the later outbound HTTPS pass entries. E03 shows the AP administration interface, but does not show the client address or network used to open it. The supplied images do not independently demonstrate all four successful source/target tests. E05–E09 establish the displayed rule settings, order, and aliases. The switch's actual service listeners, explicit login-test results, and persistence after reboot remain unrecorded. Access from unauthorized VLANs was not tested as part of this incident record.
 
+## Later Stage 3 context
+
+The [Stage 3 completion record](../../00_Project_Overview/04_Stage_3_Completion_2026-09-23.md) documents later Parrot-supplied screenshots showing the switch at `10.10.10.2` and the AP at `10.10.10.3` on the Management VLAN. The first later set (P02, 23:02) still showed overlapping temporary `LEGACY_INFRA` rules. The subsequent cleanup capture C02 (23:43) shows both legacy permits and the temporary MGMT firewall-HTTPS permit removed. C03 shows `ADMIN_HOSTS` narrowed to `10.10.20.110`. These cleanup changes close the visible temporary-rule observation; this incident gallery preserves the earlier settings for chronology. The project owner confirmed current management access; this documentation review did not connect to or retest the live network. These later observations provide historical follow-up and do not change the incident-time addresses, sequence, or conclusions above.
+
 ## Screenshot evidence
 
-All nine supplied screenshots were inspected and copied into this report's local evidence folder without altering their contents. Byte-for-byte comparisons verified the copies against the supplied Desktop and temporary screenshot files. Filenames below preserve the original capture references.
+All nine source screenshots were inspected. The images embedded below are reviewed redacted derivatives rather than byte-for-byte originals. Solid masks remove the administrator account/hostname and unrelated browser or desktop chrome where visible; private technical IP addresses, firewall aliases, and relevant configuration fields remain visible. Programmatic comparison verified that pixels outside the declared mask rectangles match the source captures. The unredacted originals remain private, and the filenames below preserve their original capture references.
 
 | Evidence | Original filename | What it establishes |
 |---|---|---|
@@ -226,7 +230,7 @@ The form confirms Enabled, MGMT as Interface (rule), any as Interface (origin), 
 
 ![E09: Enabled MGMT pass rule with Quick checked](../../../assets/screenshots/troubleshooting/2026-09-23-mgmt-access/09-opnsense-rule-upper-fields.png)
 
-These are the original local evidence copies. The firewall captures include the administrator account/hostname and internal addresses; review these details before public publication. Raw configuration exports remain outside this report.
+These embedded files are the reviewed redacted derivatives. Private technical IP addresses and aliases are retained because they support the incident analysis; the administrator account/hostname and unrelated chrome are masked where visible. The unredacted source captures and raw configuration exports remain outside this report.
 
 ## Lessons and follow-up
 
@@ -236,8 +240,8 @@ These are the original local evidence copies. The firewall captures include the 
 - Check each device's own restrictions on management from another subnet when building routed administration access.
 - Preserve the four successful source/target tests above as the incident's recovery evidence. Record isolation tests separately before declaring segmentation validated.
 - Capture both rule fields and alias definitions, since the latter establish the actual hosts and port numbers covered by a rule. E06–E08 now provide those definitions.
-- Review the redundant lower legacy permit and whether UDP is required in the upper permit. Any cleanup should preserve the working exception above the internal-network block and be validated separately.
-- After evidence review, record whether the corrected configurations were saved persistently and included in new backups. Remove or revise the temporary legacy exception when device management moves to VLAN 10.
+- The later C02 cleanup image shows both temporary legacy permits removed. Preserve this incident-time rule-order lesson while using the Stage 3 completion record for the current policy.
+- Record persistence, post-cleanup validation, and refreshed backups for the final policy. Initial Stage 3 backups were owner-confirmed; a refreshed backup after the later cleanup has not been separately reported.
 
 ## Record limits
 

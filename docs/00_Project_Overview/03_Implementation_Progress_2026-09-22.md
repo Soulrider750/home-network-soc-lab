@@ -1,5 +1,7 @@
 # Implementation Progress: Core Network and Pre-VLAN Preparation
 
+> Historical snapshot from September 22. For the later completed stage and reviewed Parrot evidence, see the [September 23 Stage 3 completion record](04_Stage_3_Completion_2026-09-23.md).
+
 **Updated:** September 22, 2026
 
 **Current stage:** Stage 3 — VLAN segmentation and new SSIDs
